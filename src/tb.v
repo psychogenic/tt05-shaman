@@ -24,11 +24,40 @@ module tb ();
     reg  [7:0] uio_in;
 
     wire [6:0] segments = uo_out[6:0];
+    
+    
+    
+    
     wire [7:0] uo_out;
     wire [7:0] uio_out;
     wire [7:0] uio_oe;
+    
+    
+    // utility wires for naming
+    wire [7:0] databyteIn;
+    assign ui_in[7:0] = databyteIn[7:0];
+    wire [7:0] resultbyteOut = uo_out[7:0];
 
-    tt_um_seven_segment_seconds tt_um_seven_segment_seconds (
+    wire parallelLoading;
+    wire resultNext;
+    wire start;
+    wire clockinData;
+    
+    
+    wire resultReady =                  uio_out[0];
+    wire beginProcessingDataBlock =     uio_out[1];
+    assign uio_in[0] = 0;
+    assign uio_in[1] = 0;
+    assign uio_in[2] = parallelLoading;
+    assign uio_in[3] = resultNext;
+    assign uio_in[4] = 0;
+    assign uio_in[5] = 0;
+    wire busy =                         uio_out[4];
+    wire processingReceivedDataBlock =  uio_out[5];
+    assign uio_in[6] = start;
+    assign uio_in[7] = clockinData;
+    
+    tt_um_psychogenic_shaman tt_um_psychogenic_shaman (
     // include power ports for the Gate Level test
     `ifdef GL_TEST
         .VPWR( 1'b1),
