@@ -34,12 +34,14 @@ documentation:
       some cycles to finish processing).
       
       The process is to:
+      
         - toggle start, to reset the digest
         - put data byte on the databyte input (the "in" port)
         - wait until busy is de-asserted (if required)
         - clock the clockin_data pin
       
       After each complete block, the digest will become available after some clocks.  In short if
+      
         - busy is not asserted; and
         - result_ready goes high
       
@@ -63,6 +65,7 @@ documentation:
       is when processing longer messages, to swamp out the minor overhead of setup etc.
       
       When loading input data, if using parallel mode, hold clockin_data for an extra system clock.  So
+      
         - data byte on inputs
         - clockin_data HIGH
         - hold one system clock
@@ -143,4 +146,4 @@ documentation:
   discord:      "psychogenictech"      # Your discord handle, used for communication and automatically assigning tapeout role after a submission
   doc_link:     "README.md"      # URL to longer form documentation, eg the README.md in your repository
   clock_hz:     10000000       # Clock frequency in Hz (if required)
-  picture:      ""      # relative path to a picture in your repository (must be 512kb or less)
+  picture:      "img/shaman-logo.jpg"      # relative path to a picture in your repository (must be 512kb or less)
