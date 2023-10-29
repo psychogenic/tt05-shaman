@@ -1,0 +1,68 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Sun Oct 29 14:56:24 2023
+[*]
+[dumpfile] "/home/malcalypse/Private/eclipseworkspace/TT05/tt05-shaman/src/tb.vcd"
+[dumpfile_mtime] "Sun Oct 29 14:39:51 2023"
+[dumpfile_size] 30616353
+[savefile] "/home/malcalypse/Private/eclipseworkspace/TT05/tt05-shaman/src/tb-gatelevel.gtkw"
+[timestart] 0
+[size] 3370 1369
+[pos] -1 -1
+*-30.544283 2460001000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] tb.
+[treeopen] tb.tt_um_psychogenic_shaman.
+[sst_width] 515
+[signals_width] 369
+[sst_expanded] 1
+[sst_vpaned_height] 405
+@28
+[color] 2
+tb.tt_um_psychogenic_shaman.clk
+[color] 2
+tb.tt_um_psychogenic_shaman.rst_n
+@800022
+[color] 7
+tb.tt_um_psychogenic_shaman.uio_in[7:0]
+@28
+[color] 3
++{clockinData} (0)tb.tt_um_psychogenic_shaman.uio_in[7:0]
+[color] 3
++{start} (1)tb.tt_um_psychogenic_shaman.uio_in[7:0]
+[color] 3
++{resultNext} (4)tb.tt_um_psychogenic_shaman.uio_in[7:0]
+[color] 3
++{parallel} (5)tb.tt_um_psychogenic_shaman.uio_in[7:0]
+@1001200
+-group_end
+@c00022
+[color] 3
++{dataIn} tb.tt_um_psychogenic_shaman.ui_in[7:0]
+@28
+(0)tb.tt_um_psychogenic_shaman.ui_in[7:0]
+(1)tb.tt_um_psychogenic_shaman.ui_in[7:0]
+(2)tb.tt_um_psychogenic_shaman.ui_in[7:0]
+(3)tb.tt_um_psychogenic_shaman.ui_in[7:0]
+(4)tb.tt_um_psychogenic_shaman.ui_in[7:0]
+(5)tb.tt_um_psychogenic_shaman.ui_in[7:0]
+(6)tb.tt_um_psychogenic_shaman.ui_in[7:0]
+(7)tb.tt_um_psychogenic_shaman.ui_in[7:0]
+@1401200
+-group_end
+@800022
+[color] 7
+tb.tt_um_psychogenic_shaman.uio_out[7:0]
+@28
++{procBlock} (2)tb.tt_um_psychogenic_shaman.uio_out[7:0]
++{busy} (3)tb.tt_um_psychogenic_shaman.uio_out[7:0]
+@29
++{beginBlock} (6)tb.tt_um_psychogenic_shaman.uio_out[7:0]
+@28
++{resultReady} (7)tb.tt_um_psychogenic_shaman.uio_out[7:0]
+@1001200
+-group_end
+@22
++{resultByte} tb.tt_um_psychogenic_shaman.uo_out[7:0]
+tb.tt_um_psychogenic_shaman.uio_oe[7:0]
+[pattern_trace] 1
+[pattern_trace] 0
