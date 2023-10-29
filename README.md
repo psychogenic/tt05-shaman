@@ -7,6 +7,10 @@ Shaman is a hardware (ASIC) implementation of a sha256 hasher for inclusion on T
   Copyright (C) 2023 Pat Deegan, [https://psychogenic.com/](https://psychogenic.com/)
 
 
+![SHAMAN Project](https://raw.githubusercontent.com/psychogenic/tt05-shaman/main/img/shaman-logo.jpg)
+
+
+
 This implements the SHA256 digest to create hashes of the data you feed in.  It is a naive, mostly unoptimized, implementation
 of the algorithm (though you can interleave data input while it's processing, using parallel mode, if you respect busy).
 
