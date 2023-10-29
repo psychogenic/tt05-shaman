@@ -37,12 +37,13 @@ Pinout looks a little weird but it is hoped this will be a nice match for the PM
 
 NOTES
 
-It does NOT massage the input data into suitable blocks. These are basically massaged according to the spec, you can 
-see this in action in the message_to_blocks() function, in test.py.
+It does NOT massage the input data into suitable blocks. Messages need to be appended with an 0x80 byte, padded 
+such that the entire thing, along with an 8 byte suffix containing the length (big end), is a multiple of 512 
+bits (64 bytes). You can see this in action in the message_to_blocks() function, in test.py.
 
 I don't think it's super fast but, in parallel mode, I *think* simulation indicates it takes on the order of 8.3 microseconds
-per byte using a 1MHz system clock.  So, if we could feed this say a 50MHz clock, we'd get down to 166 ns/byte.  
-That's only on the order of 6 megabytes per second, I dunno maybe 100x slower than my laptop, but my 
+per byte using a 1MHz system clock.  So, if we could feed this a 50MHz clock, say, we'd get down to 166 ns/byte.
+That's only hashing on the order of 6 megabytes per second, I dunno maybe 100x slower than my laptop, but my 
 laptop doesn't run on a 50MHz clock and whatevs: should do the job if it holds in realy life.  All this 
 is when processing longer messages, to swamp out the minor overhead of setup etc.
 
