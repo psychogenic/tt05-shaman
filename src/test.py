@@ -9,10 +9,16 @@ import cocotb
 from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge, FallingEdge, Timer, ClockCycles
 import hashlib
+import os
 
+GateLevelTest = False
+if os.environ.get('GATES') == 'yes':
+    GateLevelTest = True
+    
 
 DoLongLongTest = False
-DoEverySizeBlockTest = False
+DoEverySizeBlockTest = True
+
 
 TestMessage = b'if I was a cat, I might be fat but--unlike a cat--I wear a hat, and am in the end not (so) fat... however ' * 3
 TestMessageIndy = b'There was a young man of Killarney Who was chock full of what is called blarney'
@@ -43,20 +49,33 @@ async def reset(dut):
     
 @cocotb.test()
 async def test_synchronous(dut):
+    
+    msg = TestMessageIndy
+    
+    if GateLevelTest:
+        if len(msg) > 64+5:
+            dut._log.info('Truncating message for gatelevel test')
+            msg = msg[:64+5]
+            
     dut._log.info("start")
     clock = Clock(dut.clk, 10, units="us")
     cocotb.start_soon(clock.start())
     
     await reset(dut)
-    message_blocks = message_to_blocks(TestMessageIndy)
-    dut._log.info(f'Encoding "{TestMessageIndy}" using spinlock')
+    message_blocks = message_to_blocks(msg)
+    dut._log.info(f'Encoding "{msg}" using spinlock')
     dut.parallelLoading.value = 0
     await ClockCycles(dut.clk, 2)
-    await processMessageBlocks(dut, TestMessageIndy, message_blocks)
+    await processMessageBlocks(dut, msg, message_blocks)
     
 
 @cocotb.test()
 async def testBothSHA(dut):
+    
+    if GateLevelTest:
+        dut._log.info('Too heavy for gate level test, skip.')
+        return
+        
     dut._log.info("start")
     clock = Clock(dut.clk, 10, units="us")
     cocotb.start_soon(clock.start())
@@ -77,6 +96,11 @@ async def testBothSHA(dut):
 
 @cocotb.test()
 async def test_parallel(dut):
+    
+    if GateLevelTest:
+        dut._log.info('Too heavy for gate level test, skip.')
+        return
+        
     dut._log.info("start")
     clock = Clock(dut.clk, 10, units="us")
     cocotb.start_soon(clock.start())
@@ -84,6 +108,10 @@ async def test_parallel(dut):
     await reset(dut)
     
     msg = TestMessageIndy
+    
+    
+        
+    
     message_blocks = message_to_blocks(msg)
     dut._log.info(f'Encoding "{msg}" using parallel')
     dut.parallelLoading.value = 1
@@ -94,6 +122,10 @@ async def test_parallel(dut):
 
 @cocotb.test()
 async def test_bigtext(dut):
+    
+    if GateLevelTest:
+        dut._log.info('Too heavy for gate level test, skip.')
+        return
         
     dut._log.info(f"starting test 10MHz clock ({len(LongLongMessage)} bytes)")
     clock = Clock(dut.clk, 100, units="ns")
@@ -191,11 +223,17 @@ async def test_boundaryblocksizes(dut):
         dut._log.info("Skipping: doing 'everysize' test instead")
         return 
         
+    testsToRun = BoundaryTests
+    if GateLevelTest:
+        dut._log.info('Too heavy for gate level test, shorten.')
+        testsToRun = [BoundaryTests[2]]
+        return
+        
     dut.parallelLoading.value = 1
     await ClockCycles(dut.clk, 2)
     
     
-    for tst in BoundaryTests:
+    for tst in testsToRun:
         sz = tst[0]
         msg = BoundaryTestString[0:sz]
         dut._log.info(f"Size {sz}: '{msg}'")
