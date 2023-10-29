@@ -2,16 +2,16 @@
 
 # SHAman
 
-Shaman is a hardware (ASIC) implementation of a sha256 hasher for inclusion on TinyTapeout.  It is
+SHAman is a hardware (ASIC) implementation of a sha256 hasher for inclusion on TinyTapeout.  It is
 
   Copyright (C) 2023 Pat Deegan, [https://psychogenic.com/](https://psychogenic.com/)
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/psychogenic/tt05-shaman/main/img/shaman-logo.jpg" width="300" />
+</p>
 
-<img src="https://raw.githubusercontent.com/psychogenic/tt05-shaman/main/img/shaman-logo.jpg" width="250" align="center">
 
-
-
-This implements the SHA256 digest to create hashes of the data you feed in.  It is a naive, mostly unoptimized, implementation
+This implements the SHA-256 digest to create hashes of the data you feed in.  It is a naive, mostly unoptimized, implementation
 of the algorithm (though you can interleave data input while it's processing, using parallel mode, if you respect busy).
 
 Data is fed into the system in 64 byte blocks.  The hash is available after each 64 byte block has been input (allowing for
