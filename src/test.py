@@ -10,120 +10,20 @@ from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge, FallingEdge, Timer, ClockCycles
 import hashlib
 
-TestMessage = b'if I was a cat, I might be fat but--unlike a cat--I wear a hat, and am in the end not (so) fat... however ' * 9
+
+DoLongLongTest = False
+DoEverySizeBlockTest = False
+
+TestMessage = b'if I was a cat, I might be fat but--unlike a cat--I wear a hat, and am in the end not (so) fat... however ' * 3
 TestMessageIndy = b'There was a young man of Killarney Who was chock full of what is called blarney'
+TestMessageAllSizesTemplate = b'Awake. Shake dreams from your hair, my pretty child, my sweet one. ' \
+                      b'Choose the day and choose the sign of your day. The day\'s divinity. First thing you see.'
 
-'''
+LongLongMessage = b'1234567890'*1024*50
 
-    wire [7:0] dataByteIn = ui_in[7:0];
-    wire [7:0] resultbyteOut = ui_out[7:0];
-    
-    wire resultReady =                  uio_out[0];
-    wire beginProcessingDataBlock =     uio_out[1];
-    wire parallelLoading =              uio_in[2];
-    wire resultNext =                   uio_in[3];
-    wire busy =                         uio_out[4];
-    wire processingReceivedDataBlock =  uio_out[5];
-    wire start =                        uio_in[6];
-    wire clockinData =                  uio_in[7];
-
-'''
-
-
-async def loadMessageBlock(dut, message_block):
-    # print(f' handle message block (f{message_block}) len {len(message_block)}')
-    t = 0
-    numSlots = len(message_block)/4
-    while t < numSlots:
-        #print(message_block[t])
-        i = int.from_bytes(bytes(message_block[t*4:(t*4)+4]), 'big')
-        for btIdx in range(4):
-            daShift = ((3-btIdx)*8)
-            byteVal = (i & (0xff << daShift)) >> daShift
-            
-            numBusyTicks = 0
-            isBusy = dut.busy.value
-            while isBusy and numBusyTicks < 1000:
-                await ClockCycles(dut.clk, 1)
-                isBusy = dut.busy.value
-                
-            assert numBusyTicks < 1000
-            
-            dut.databyteIn.value = byteVal 
-            dut.clockinData.value = 1
-            await ClockCycles(dut.clk, 4)
-            dut.clockinData.value = 0
-            await ClockCycles(dut.clk, 4)
-            
-            
-        isBusy = dut.busy.value
-        if (t < numSlots - 1 ) and isBusy:
-            dut._log.info("hum busy")
-        
-        t += 1
-        
-
-async def processMessageBlocks(dut, encodedMsg, message_blocks):
-    dut.start.value = 1
-    await ClockCycles(dut.clk, 10)
-    dut.start.value = 0
-    await ClockCycles(dut.clk, 10)
-    tickCountTotal = 0
-    
-    for block in message_blocks:
-        await loadMessageBlock(dut, block)
-        
-        numBusyTicks = 0
-        isBusy = dut.busy.value
-        outputReady = dut.resultReady.value
-        while (isBusy and (not outputReady)):
-            await ClockCycles(dut.clk, 1)
-            numBusyTicks += 1
-            isBusy = dut.busy.value
-            outputReady = dut.resultReady.value
-        
-        tickCountTotal += numBusyTicks
-        # dut._log.info(f'Processed block in {numBusyTicks} ticks')
-    
-    avgTickCount = int(tickCountTotal/len(message_blocks))
-    dut._log.info(f'Spent avg of {avgTickCount} waiting on processing, per block')
-
-    dut._log.info(f'All blocks input, waiting until done...')
-    numWaitFinalTicks = 0
-    await ClockCycles(dut.clk, 1)
-    outputReady = dut.resultReady.value
-    while not outputReady:
-        outputReady = dut.resultReady.value
-        await ClockCycles(dut.clk, 1)
-        numWaitFinalTicks += 1
-        
-    dut._log.info(f'Done after {numWaitFinalTicks}')
-        
-    results_bytes = []
-    for i in range(32):
-        results_bytes.append(dut.resultbyteOut.value)
-        dut.resultNext.value = 1
-        await ClockCycles(dut.clk, 2)
-        dut.resultNext.value = 0
-        await ClockCycles(dut.clk, 2)
-        
-    calculated = ''.join(map(lambda i: f'{int(i):02x}', results_bytes))
-    m = hashlib.sha256()
-    
-    m.update(encodedMsg)
-    hashed = m.hexdigest()
-    
-    dut._log.info('SHA256 RESULT:')
-    dut._log.info(f'calculated: {calculated}')
-    dut._log.info(f'hashlib dg: {hashed}')
-    
-    assert hashed == calculated 
-    
-    
 
 
 async def reset(dut):
-    
     # reset
     dut._log.info("reset")
     dut.databyteIn.value = 0
@@ -132,10 +32,12 @@ async def reset(dut):
     dut.start.value = 0
     dut.resultNext.value = 0
     
+    # these long pulses are just for visibility on the edge there
     dut.rst_n.value = 0
     await ClockCycles(dut.clk, 100)
     dut.rst_n.value = 1
-    await ClockCycles(dut.clk, 30)
+    await ClockCycles(dut.clk, 10) 
+
 
 
     
@@ -190,6 +92,119 @@ async def test_parallel(dut):
     await processMessageBlocks(dut, msg, message_blocks)
 
 
+@cocotb.test()
+async def test_bigtext(dut):
+        
+    dut._log.info(f"starting test 10MHz clock ({len(LongLongMessage)} bytes)")
+    clock = Clock(dut.clk, 100, units="ns")
+    cocotb.start_soon(clock.start())
+    
+    await reset(dut)
+    
+    
+    if not DoLongLongTest:
+        dut._log.info('Skipping longlong test')
+        return 
+    
+    msg = LongLongMessage
+    message_blocks = message_to_blocks(msg)
+    dut._log.info(f'Encoding Lotsabytes using parallel')
+    dut.parallelLoading.value = 1
+    await ClockCycles(dut.clk, 2)
+    
+    await processMessageBlocks(dut, msg, message_blocks)
+
+
+        
+@cocotb.test()
+async def test_everysizeblock(dut):
+    
+    dut._log.info("start")
+    clock = Clock(dut.clk, 10, units="us")
+    cocotb.start_soon(clock.start())
+    
+    await reset(dut)
+    
+    if not DoEverySizeBlockTest:
+        dut._log.info("Skipping 'everysize' test")
+        return 
+        
+    dut.parallelLoading.value = 1
+    await ClockCycles(dut.clk, 2)
+    
+    msgTemplate = TestMessageAllSizesTemplate * 10
+    
+    for i in range(1, 64*3):
+        msg = msgTemplate[0:i]
+        message_blocks = message_to_blocks(msg)
+        
+        dut._log.info(f'Test {i+1}: {msg}')
+        numTicks = await processMessageBlocks(dut, msg, message_blocks, quietLogging=True)
+        dut._log.info(f'OK (in {numTicks} ticks)')
+
+
+BoundaryTestString= """Dear Sir stroke Madam, I am writing to inform you of a fire which has broken out on the premises of... no, that's too formal.Dear Sir stroke Madam.Fire... exclamation mark.Fire... exclamation mark. Help me... exclamation mark. 123 Carrendon Road.Looking forward to hearing from you."""
+
+# calculated hashes for substrings, using sha256sum
+BoundaryTests = [# "D"
+(1,
+	'3f39d5c348e5b79d06e842c114e6cc571583bbf44e4b0ebfda1a01ec05745d43'),
+# "De"
+(2,
+	'e2eca64bd73ce8672efc022c65d7a599f8bbfc1e216a6fe9d08f82e20061d618'),
+# "Dea"
+(3,
+	'063fa0eb89944a26ec1e68b58f0e67cdd254d3cae5aea28daa71bca2c8fa1947'),
+# "Dear Sir stroke Madam, I am writing to inform you of a fire wh"
+(62,
+	'90fc0a268f8b81bc6c317ea4748f0a1692f60d73302c3df8596dd1e71953f402'),
+# "Dear Sir stroke Madam, I am writing to inform you of a fire whi"
+(63,
+	'3ae03b684b8ef073b8cb60e4cf540ed80a7d5e4eb395da1117c7142c2df113f7'),
+# "Dear Sir stroke Madam, I am writing to inform you of a fire whic"
+(64,
+	'b1caae86680b14f40ec3ebee88c961a79d60d4670a52e08f8f14dc1aaf3a028a'),
+# "Dear Sir stroke Madam, I am writing to inform you of a fire which"
+(65,
+	'a82bce2cb69472e018d823b990b93a7e201e3291a45c58d92c24a88b06d96bed'),
+# "Dear Sir stroke Madam, I am writing to inform you of a fire which has broken out on the premises of... no, that's too formal.De"
+(127,
+	'f68340bd496c1f9c082887a3196d38bcae855f1effed51629788b976cff1e4f6'),
+# "Dear Sir stroke Madam, I am writing to inform you of a fire which has broken out on the premises of... no, that's too formal.Dea"
+(128,
+	'baaf138cab10cd71049a70dc377ecead43d26645d885621ac0bffe290f18637e'),
+# "Dear Sir stroke Madam, I am writing to inform you of a fire which has broken out on the premises of... no, that's too formal.Dear"
+(129,
+	'0dd8ceed479109f82ef65c3eb51ca9eedf3d013445c8124ce521638f63f520b6'),
+]
+
+@cocotb.test()
+async def test_boundaryblocksizes(dut):
+    
+    dut._log.info("start")
+    clock = Clock(dut.clk, 10, units="us")
+    cocotb.start_soon(clock.start())
+    
+    await reset(dut)
+    
+    if DoEverySizeBlockTest:
+        dut._log.info("Skipping: doing 'everysize' test instead")
+        return 
+        
+    dut.parallelLoading.value = 1
+    await ClockCycles(dut.clk, 2)
+    
+    
+    for tst in BoundaryTests:
+        sz = tst[0]
+        msg = BoundaryTestString[0:sz]
+        dut._log.info(f"Size {sz}: '{msg}'")
+        message_blocks = message_to_blocks(msg)
+        await processMessageBlocks(dut, msg, message_blocks, quietLogging=False, hashval=tst[1])
+        
+        
+    
+    
 
 def message_to_blocks(message: bytearray) -> bytearray:
     """chunk message bytearray into 512 bit block(s) with any required padding"""
@@ -217,3 +232,117 @@ def message_to_blocks(message: bytearray) -> bytearray:
         blocks.append(message[i:i+64])
         
     return blocks
+    
+    
+
+async def loadMessageBlock(dut, message_block):
+    # print(f' handle message block (f{message_block}) len {len(message_block)}')
+    t = 0
+    numSlots = len(message_block)/4
+    numBusyTicks = 0
+    numTotalTicks = 0
+    while t < numSlots:
+        #print(message_block[t])
+        i = int.from_bytes(bytes(message_block[t*4:(t*4)+4]), 'big')
+        for btIdx in range(4):
+            daShift = ((3-btIdx)*8)
+            byteVal = (i & (0xff << daShift)) >> daShift
+            
+            numBusyTicks = 0
+            isBusy = dut.busy.value
+            while isBusy and numBusyTicks < 1000:
+                await ClockCycles(dut.clk, 1)
+                isBusy = dut.busy.value
+                numBusyTicks += 1
+                
+            assert numBusyTicks < 1000
+            
+            dut.databyteIn.value = byteVal 
+            dut.clockinData.value = 1
+            await ClockCycles(dut.clk, 2) # in parallel mode, this needs to be 2, 1 ok in sync
+            dut.clockinData.value = 0
+            await ClockCycles(dut.clk, 1)
+            
+            numTotalTicks += (numBusyTicks + 3)
+            
+            
+        isBusy = dut.busy.value
+        if (t < numSlots - 1 ) and isBusy:
+            dut._log.info("hum busy")
+        
+        t += 1
+        
+    return numTotalTicks 
+        
+
+async def processMessageBlocks(dut, encodedMsg, message_blocks, quietLogging=True, hashval:str = None):
+    dut.start.value = 1
+    await ClockCycles(dut.clk, 1)
+    dut.start.value = 0
+    await ClockCycles(dut.clk, 1)
+    tickWaitCountTotal = 0
+    
+    loadTicksTotal = 0
+    
+    for block in message_blocks:
+        loadTicksTotal += await loadMessageBlock(dut, block)
+        
+        numBusyTicks = 0
+        isBusy = dut.busy.value
+        outputReady = dut.resultReady.value
+        while (isBusy and (not outputReady)):
+            await ClockCycles(dut.clk, 1)
+            numBusyTicks += 1
+            isBusy = dut.busy.value
+            outputReady = dut.resultReady.value
+        
+        tickWaitCountTotal += numBusyTicks
+        # dut._log.info(f'Processed block in {numBusyTicks} ticks')
+    
+    avgWaitTickCount = int(tickWaitCountTotal/len(message_blocks))
+    if not quietLogging:
+        dut._log.info(f'Spent avg of {avgWaitTickCount} waiting on processing, per block')
+        dut._log.info(f'All blocks input, waiting until done...')
+        
+    numWaitFinalTicks = 0
+    # await ClockCycles(dut.clk, 1)
+    outputReady = dut.resultReady.value
+    while not outputReady:
+        outputReady = dut.resultReady.value
+        await ClockCycles(dut.clk, 1)
+        numWaitFinalTicks += 1
+        
+    
+    tickWaitCountTotal += numWaitFinalTicks
+    if not quietLogging:
+        dut._log.info(f'Done after {numWaitFinalTicks}')
+        
+    await ClockCycles(dut.clk, 2)  # changing this to 1 causes skips/fails
+    
+    results_bytes = []
+    for i in range(32):
+        results_bytes.append(dut.resultbyteOut.value)
+        dut.resultNext.value = 1
+        await ClockCycles(dut.clk, 2)  # changing this to 1 causes skips/fails
+        dut.resultNext.value = 0
+        await ClockCycles(dut.clk, 1)
+        
+    calculated = ''.join(map(lambda i: f'{int(i):02x}', results_bytes))
+    if hashval is None or not len(hashval):
+        m = hashlib.sha256()
+        
+        m.update(encodedMsg)
+        hashval = m.hexdigest()
+    
+    if not quietLogging:
+        dut._log.info('SHA256 RESULT:')
+        dut._log.info(f'calculated:  {calculated}')
+        dut._log.info(f'hashlib/ext: {hashval}')
+    
+    assert hashval == calculated 
+    
+    
+    return  tickWaitCountTotal
+    
+    
+

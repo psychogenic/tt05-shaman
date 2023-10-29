@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Sat Oct 28 10:44:18 2023
+[*] Sun Oct 29 00:12:53 2023
 [*]
 [dumpfile] "/home/malcalypse/Private/eclipseworkspace/TT05/tt05-shaman/src/tb.vcd"
-[dumpfile_mtime] "Sat Oct 28 10:34:30 2023"
-[dumpfile_size] 28874116
-[savefile] "/home/malcalypse/Private/eclipseworkspace/TT05/tt05-shaman/src/mytb.gtkw"
-[timestart] 240405000000
+[dumpfile_mtime] "Sat Oct 28 23:55:05 2023"
+[dumpfile_size] 26390217
+[savefile] "/home/malcalypse/Private/eclipseworkspace/TT05/tt05-shaman/src/tb.gtkw"
+[timestart] 93095800000
 [size] 3370 1369
 [pos] -1 -1
-*-30.814528 256031000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-27.394154 94149700000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.tt_um_psychogenic_shaman.
 [treeopen] tb.tt_um_psychogenic_shaman.shapi.
@@ -33,9 +33,14 @@ tb.tt_um_psychogenic_shaman.shapi.databyteIn[7:0]
 @28
 tb.tt_um_psychogenic_shaman.shapi.beginProcessingDataBlock
 tb.tt_um_psychogenic_shaman.shapi.processingReceivedDataBlock
-@29
-[color] 2
+[color] 3
 tb.tt_um_psychogenic_shaman.shapi.resultReady
+@29
+[color] 3
+tb.tt_um_psychogenic_shaman.shapi.resultNext
+@22
+[color] 3
+tb.tt_um_psychogenic_shaman.uo_out[7:0]
 @24
 tb.tt_um_psychogenic_shaman.shapi.slotsByteIndex[6:0]
 @22
