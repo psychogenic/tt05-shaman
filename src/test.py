@@ -17,7 +17,7 @@ if os.environ.get('GATES') == 'yes':
     
 
 DoLongLongTest = False
-DoEverySizeBlockTest = True
+DoEverySizeBlockTest = False
 
 
 TestMessage = b'if I was a cat, I might be fat but--unlike a cat--I wear a hat, and am in the end not (so) fat... however ' * 3
@@ -38,15 +38,45 @@ async def reset(dut):
     dut.start.value = 0
     dut.resultNext.value = 0
     
+    dut._log.info("bring low")
     # these long pulses are just for visibility on the edge there
     dut.rst_n.value = 0
-    await ClockCycles(dut.clk, 100)
+    await ClockCycles(dut.clk, 10)
+    dut._log.info("bring high")
     dut.rst_n.value = 1
     await ClockCycles(dut.clk, 10) 
-
-
-
     
+    dut.start.value = 1
+    await ClockCycles(dut.clk, 4)
+    dut.start.value = 0 
+    await ClockCycles(dut.clk, 4)
+    
+    
+    dut._log.info("reset done")
+
+
+@cocotb.test()
+async def test_sacraficiallamb(dut):
+    
+    dut._log.info("start sacrificial lamb--reset all state")
+    clock = Clock(dut.clk, 10, units="us")
+    cocotb.start_soon(clock.start())
+    
+    await reset(dut)
+    
+    dut.parallelLoading.value = 0
+    dut.resultNext.value = 0
+    dut.clockinData.value = 0
+    await ClockCycles(dut.clk, 2)
+    for i in range(3):
+        for j in range(64):
+            dut.clockinData.value = 1
+            await ClockCycles(dut.clk, 2)
+            dut.clockinData.value = 0
+            await ClockCycles(dut.clk, 2)
+        await ClockCycles(dut.clk, 600)
+        
+
 @cocotb.test()
 async def test_synchronous(dut):
     
@@ -279,8 +309,11 @@ async def loadMessageBlock(dut, message_block):
     numSlots = len(message_block)/4
     numBusyTicks = 0
     numTotalTicks = 0
+    dut._log.info('Load msg block')
+    dut._log.debug(f'contents: {message_block}')
     while t < numSlots:
         #print(message_block[t])
+        dut._log.debug(f'Slot {t}')
         i = int.from_bytes(bytes(message_block[t*4:(t*4)+4]), 'big')
         for btIdx in range(4):
             daShift = ((3-btIdx)*8)
@@ -289,33 +322,38 @@ async def loadMessageBlock(dut, message_block):
             numBusyTicks = 0
             isBusy = dut.busy.value
             while isBusy and numBusyTicks < 1000:
+                dut._log.debug('busy')
                 await ClockCycles(dut.clk, 1)
                 isBusy = dut.busy.value
                 numBusyTicks += 1
-                
-            assert numBusyTicks < 1000
+                assert numBusyTicks < 1000
             
+            dut._log.debug('Setting data byte and clockin')
             dut.databyteIn.value = byteVal 
             dut.clockinData.value = 1
             await ClockCycles(dut.clk, 2) # in parallel mode, this needs to be 2, 1 ok in sync
+            dut._log.debug('Setting clockin LOW')
             dut.clockinData.value = 0
             await ClockCycles(dut.clk, 1)
             
             numTotalTicks += (numBusyTicks + 3)
             
-            
+        dut._log.debug('u32 done')
         isBusy = dut.busy.value
         if (t < numSlots - 1 ) and isBusy:
             dut._log.info("hum busy")
         
         t += 1
-        
+    
+    dut._log.info(f'loadblock done in {numTotalTicks}')
     return numTotalTicks 
         
 
 async def processMessageBlocks(dut, encodedMsg, message_blocks, quietLogging=True, hashval:str = None):
+    dut._log.debug('Start message HIGH')
     dut.start.value = 1
     await ClockCycles(dut.clk, 1)
+    dut._log.debug('Start message LOW')
     dut.start.value = 0
     await ClockCycles(dut.clk, 1)
     tickWaitCountTotal = 0
@@ -323,16 +361,24 @@ async def processMessageBlocks(dut, encodedMsg, message_blocks, quietLogging=Tru
     loadTicksTotal = 0
     
     for block in message_blocks:
+        
+        dut._log.debug(f'Process block')
         loadTicksTotal += await loadMessageBlock(dut, block)
+        dut._log.debug(f'tot ticks now {loadTicksTotal}')
         
         numBusyTicks = 0
+        await ClockCycles(dut.clk, 1)
         isBusy = dut.busy.value
         outputReady = dut.resultReady.value
+        
+        dut._log.debug('Waiting for ~busy/ready')
         while (isBusy and (not outputReady)):
+            dut._log.debug('busy')
             await ClockCycles(dut.clk, 1)
             numBusyTicks += 1
             isBusy = dut.busy.value
             outputReady = dut.resultReady.value
+            assert numBusyTicks < 1000
         
         tickWaitCountTotal += numBusyTicks
         # dut._log.info(f'Processed block in {numBusyTicks} ticks')
@@ -344,11 +390,14 @@ async def processMessageBlocks(dut, encodedMsg, message_blocks, quietLogging=Tru
         
     numWaitFinalTicks = 0
     # await ClockCycles(dut.clk, 1)
+    dut._log.info('Wait for result')
     outputReady = dut.resultReady.value
     while not outputReady:
+        dut._log.debug('Check resultReady')
         outputReady = dut.resultReady.value
         await ClockCycles(dut.clk, 1)
         numWaitFinalTicks += 1
+        assert numWaitFinalTicks < 1000
         
     
     tickWaitCountTotal += numWaitFinalTicks

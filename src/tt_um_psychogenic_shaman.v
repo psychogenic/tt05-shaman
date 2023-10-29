@@ -1,5 +1,5 @@
 /*
-    Shaman v1.1.0 SHA256 hardware encoder, for tinytapeout 5.
+    Shaman v1.2.0 SHA256 hardware encoder, for tinytapeout 5.
     Copyright (C) 2023 Pat Deegan, https://psychogenic.com
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -13,13 +13,9 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
-`default_nettype none
-`timescale 1ns/1ps
-
-(* \amaranth.hierarchy  = "psychogenic_shaman.shapi.blockproc" *)
+(* \amaranth.hierarchy  = "tt_um_psychogenic_shaman.shapi.blockproc" *)
 (* generator = "Amaranth" *)
-module blockproc(rst, newMessage, hbuf0, hbuf1, hbuf2, hbuf3, hbuf4, hbuf5, hbuf6, hbuf7, doProcessBlock, bp_initdat, initBufferReady, bp_outrdy, processingCount, clk);
+module blockproc(rst, newMessage, hbuf0, hbuf1, hbuf2, hbuf3, hbuf4, hbuf5, hbuf6, hbuf7, initBufferReady, doProcessBlock, bp_initdat, bp_outrdy, processingCount, clk);
   reg \$auto$verilog_backend.cc:2083:dump_module$62  = 0;
   wire \$1 ;
   wire [32:0] \$10 ;
@@ -1188,13 +1184,13 @@ module blockproc(rst, newMessage, hbuf0, hbuf1, hbuf2, hbuf3, hbuf4, hbuf5, hbuf
   assign t1_initBufferReady = initBufferReady;
 endmodule
 
-(* \amaranth.hierarchy  = "psychogenic_shaman.shapi.blockproc.t1.wt.buf" *)
+(* \amaranth.hierarchy  = "tt_um_psychogenic_shaman.shapi.blockproc.t1.wt.buf" *)
 (* generator = "Amaranth" *)
 module \buf ();
   wire \$empty_module_filler ;
 endmodule
 
-(* \amaranth.hierarchy  = "psychogenic_shaman.shapi.blockproc.t1.ch" *)
+(* \amaranth.hierarchy  = "tt_um_psychogenic_shaman.shapi.blockproc.t1.ch" *)
 (* generator = "Amaranth" *)
 module ch(ch_y, ch_z, ch_out, ch_x);
   wire [31:0] \$1 ;
@@ -1216,7 +1212,7 @@ module ch(ch_y, ch_z, ch_out, ch_x);
   assign ch_out = \$7 ;
 endmodule
 
-(* \amaranth.hierarchy  = "psychogenic_shaman.shapi.blockproc.t2.maj" *)
+(* \amaranth.hierarchy  = "tt_um_psychogenic_shaman.shapi.blockproc.t2.maj" *)
 (* generator = "Amaranth" *)
 module maj(maj_y, maj_z, maj_out, maj_x);
   wire [31:0] \$1 ;
@@ -1240,72 +1236,7 @@ module maj(maj_y, maj_z, maj_out, maj_x);
   assign maj_out = \$9 ;
 endmodule
 
-(* \amaranth.hierarchy  = "tt_um_psychogenic_shaman" *)
-(* top =  1  *)
-(* generator = "Amaranth" *)
-module tt_um_psychogenic_shaman(uo_out, uio_in, uio_out, uio_oe, ena, clk, rst_n, ui_in
-);
-  wire \$1 ;
-  input clk;
-  wire clk;
-  input ena;
-  wire ena;
-  input rst_n;
-  wire rst_n;
-  wire shapi_beginProcessingDataBlock;
-  wire shapi_busy;
-  wire shapi_clk;
-  wire shapi_clockinData;
-  wire [7:0] shapi_databyteIn;
-  wire shapi_parallelLoading;
-  wire shapi_processingReceivedDataBlock;
-  wire shapi_resultNext;
-  wire shapi_resultReady;
-  wire [7:0] shapi_resultbyteOut;
-  wire shapi_rst;
-  wire shapi_start;
-  input [7:0] ui_in;
-  wire [7:0] ui_in;
-  input [7:0] uio_in;
-  wire [7:0] uio_in;
-  output [7:0] uio_oe;
-  wire [7:0] uio_oe;
-  output [7:0] uio_out;
-  wire [7:0] uio_out;
-  output [7:0] uo_out;
-  wire [7:0] uo_out;
-  assign \$1  = ~rst_n;
-  shapi shapi (
-    .beginProcessingDataBlock(shapi_beginProcessingDataBlock),
-    .busy(shapi_busy),
-    .clk(shapi_clk),
-    .clockinData(shapi_clockinData),
-    .databyteIn(shapi_databyteIn),
-    .parallelLoading(shapi_parallelLoading),
-    .processingReceivedDataBlock(shapi_processingReceivedDataBlock),
-    .resultNext(shapi_resultNext),
-    .resultReady(shapi_resultReady),
-    .resultbyteOut(shapi_resultbyteOut),
-    .rst(shapi_rst),
-    .start(shapi_start)
-  );
-  assign shapi_clockinData = uio_in[7];
-  assign shapi_start = uio_in[6];
-  assign shapi_resultNext = uio_in[3];
-  assign shapi_parallelLoading = uio_in[2];
-  assign uio_out[5] = shapi_processingReceivedDataBlock;
-  assign uio_out[4] = shapi_busy;
-  assign uio_out[1] = shapi_beginProcessingDataBlock;
-  assign uio_out[0] = shapi_resultReady;
-  assign { uio_out[7:6], uio_out[3:2] } = 4'h0;
-  assign uio_oe = 8'h33;
-  assign uo_out = shapi_resultbyteOut;
-  assign shapi_databyteIn = ui_in;
-  assign shapi_rst = \$1 ;
-  assign shapi_clk = clk;
-endmodule
-
-(* \amaranth.hierarchy  = "psychogenic_shaman.shapi.blockproc.t2.rot0" *)
+(* \amaranth.hierarchy  = "tt_um_psychogenic_shaman.shapi.blockproc.t2.rot0" *)
 (* generator = "Amaranth" *)
 module rot0(rot0_out, rot0_x);
   wire [31:0] \$1 ;
@@ -1325,7 +1256,7 @@ module rot0(rot0_out, rot0_x);
   assign a = { rot0_x[1:0], rot0_x[31:2] };
 endmodule
 
-(* \amaranth.hierarchy  = "psychogenic_shaman.shapi.blockproc.t1.rot1" *)
+(* \amaranth.hierarchy  = "tt_um_psychogenic_shaman.shapi.blockproc.t1.rot1" *)
 (* generator = "Amaranth" *)
 module rot1(rot1_out, rot1_x);
   wire [31:0] \$1 ;
@@ -1345,7 +1276,7 @@ module rot1(rot1_out, rot1_x);
   assign a = { rot1_x[5:0], rot1_x[31:6] };
 endmodule
 
-(* \amaranth.hierarchy  = "psychogenic_shaman.shapi.blockproc.t1.wt.s0" *)
+(* \amaranth.hierarchy  = "tt_um_psychogenic_shaman.shapi.blockproc.t1.wt.s0" *)
 (* generator = "Amaranth" *)
 module s0(s0_out, s0_x);
   wire [31:0] \$1 ;
@@ -1367,7 +1298,7 @@ module s0(s0_out, s0_x);
   assign \$1  = { 3'h0, s0_x[31:3] };
 endmodule
 
-(* \amaranth.hierarchy  = "psychogenic_shaman.shapi.blockproc.t1.wt.s1" *)
+(* \amaranth.hierarchy  = "tt_um_psychogenic_shaman.shapi.blockproc.t1.wt.s1" *)
 (* generator = "Amaranth" *)
 module s1(s1_out, s1_x);
   wire [31:0] \$1 ;
@@ -1383,7 +1314,7 @@ module s1(s1_out, s1_x);
   assign \$3  = { 10'h000, s1_x[31:10] };
 endmodule
 
-(* \amaranth.hierarchy  = "psychogenic_shaman.shapi" *)
+(* \amaranth.hierarchy  = "tt_um_psychogenic_shaman.shapi" *)
 (* generator = "Amaranth" *)
 module shapi(rst, databyteIn, resultbyteOut, resultReady, beginProcessingDataBlock, parallelLoading, resultNext, busy, processingReceivedDataBlock, start, clockinData, clk);
   reg \$auto$verilog_backend.cc:2083:dump_module$63  = 0;
@@ -1395,7 +1326,7 @@ module shapi(rst, databyteIn, resultbyteOut, resultReady, beginProcessingDataBlo
   wire \$106 ;
   wire \$108 ;
   wire \$110 ;
-  wire [6:0] \$112 ;
+  wire \$112 ;
   wire \$114 ;
   wire \$116 ;
   wire \$118 ;
@@ -1514,7 +1445,7 @@ module shapi(rst, databyteIn, resultbyteOut, resultReady, beginProcessingDataBlo
   wire \$320 ;
   wire \$322 ;
   wire \$324 ;
-  wire \$326 ;
+  wire [6:0] \$326 ;
   wire \$328 ;
   wire \$33 ;
   wire \$330 ;
@@ -1526,7 +1457,7 @@ module shapi(rst, databyteIn, resultbyteOut, resultReady, beginProcessingDataBlo
   wire \$342 ;
   wire \$344 ;
   wire \$346 ;
-  wire \$348 ;
+  wire [6:0] \$348 ;
   wire \$35 ;
   wire \$350 ;
   wire \$352 ;
@@ -1540,7 +1471,7 @@ module shapi(rst, databyteIn, resultbyteOut, resultReady, beginProcessingDataBlo
   wire \$368 ;
   wire [7:0] \$37 ;
   wire \$370 ;
-  wire \$372 ;
+  wire [6:0] \$372 ;
   wire \$374 ;
   wire \$376 ;
   wire \$378 ;
@@ -1550,9 +1481,9 @@ module shapi(rst, databyteIn, resultbyteOut, resultReady, beginProcessingDataBlo
   wire \$384 ;
   wire \$386 ;
   wire \$40 ;
-  wire \$42 ;
+  wire [6:0] \$42 ;
   wire \$44 ;
-  wire [6:0] \$46 ;
+  wire \$46 ;
   wire \$48 ;
   wire \$5 ;
   wire \$50 ;
@@ -1564,7 +1495,7 @@ module shapi(rst, databyteIn, resultbyteOut, resultReady, beginProcessingDataBlo
   wire \$62 ;
   wire \$64 ;
   wire \$66 ;
-  wire [6:0] \$68 ;
+  wire \$68 ;
   wire \$7 ;
   wire \$70 ;
   wire \$72 ;
@@ -1579,7 +1510,7 @@ module shapi(rst, databyteIn, resultbyteOut, resultReady, beginProcessingDataBlo
   wire [5:0] \$9 ;
   wire \$90 ;
   wire \$92 ;
-  wire [6:0] \$94 ;
+  wire \$94 ;
   wire \$96 ;
   wire \$98 ;
   reg [511:0] apibuf = 512'h00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
@@ -1637,210 +1568,206 @@ module shapi(rst, databyteIn, resultbyteOut, resultReady, beginProcessingDataBlo
   reg [6:0] \slotsByteIndex$next ;
   input start;
   wire start;
-  assign \$100  = slotsByteIndex < 6'h3d;
-  assign \$102  = ~ clockinData;
-  assign \$104  = ~ dataInSeen;
-  assign \$106  = ~ clockinData;
-  assign \$108  = ~ dataInSeen;
+  assign \$100  = slotsByteIndex == 5'h16;
+  assign \$102  = slotsByteIndex == 5'h17;
+  assign \$104  = slotsByteIndex == 5'h18;
+  assign \$106  = slotsByteIndex == 5'h19;
+  assign \$108  = slotsByteIndex == 5'h1a;
   assign \$10  = resultIndex + 1'h1;
-  assign \$110  = beginProcessingDataBlock | processingReceivedDataBlock;
-  assign \$112  = blockproc_processingCount & 6'h3f;
-  assign \$114  = \$112  < 2'h2;
-  assign \$116  = beginProcessingDataBlock | \$114 ;
-  assign \$118  = slotsByteIndex < 6'h3d;
-  assign \$120  = ~ clockinData;
-  assign \$122  = ~ dataInSeen;
-  assign \$124  = slotsByteIndex == 6'h3f;
-  assign \$126  = ! slotsByteIndex;
-  assign \$128  = slotsByteIndex == 1'h1;
+  assign \$110  = slotsByteIndex == 5'h1b;
+  assign \$112  = slotsByteIndex == 5'h1c;
+  assign \$114  = slotsByteIndex == 5'h1d;
+  assign \$116  = slotsByteIndex == 5'h1e;
+  assign \$118  = slotsByteIndex == 5'h1f;
+  assign \$120  = slotsByteIndex == 6'h20;
+  assign \$122  = slotsByteIndex == 6'h21;
+  assign \$124  = slotsByteIndex == 6'h22;
+  assign \$126  = slotsByteIndex == 6'h23;
+  assign \$128  = slotsByteIndex == 6'h24;
   assign \$12  = beginProcessingDataBlock | processingReceivedDataBlock;
-  assign \$130  = slotsByteIndex == 2'h2;
-  assign \$132  = slotsByteIndex == 2'h3;
-  assign \$134  = slotsByteIndex == 3'h4;
-  assign \$136  = slotsByteIndex == 3'h5;
-  assign \$138  = slotsByteIndex == 3'h6;
-  assign \$140  = slotsByteIndex == 3'h7;
-  assign \$142  = slotsByteIndex == 4'h8;
-  assign \$144  = slotsByteIndex == 4'h9;
-  assign \$146  = slotsByteIndex == 4'ha;
-  assign \$148  = slotsByteIndex == 4'hb;
+  assign \$130  = slotsByteIndex == 6'h25;
+  assign \$132  = slotsByteIndex == 6'h26;
+  assign \$134  = slotsByteIndex == 6'h27;
+  assign \$136  = slotsByteIndex == 6'h28;
+  assign \$138  = slotsByteIndex == 6'h29;
+  assign \$140  = slotsByteIndex == 6'h2a;
+  assign \$142  = slotsByteIndex == 6'h2b;
+  assign \$144  = slotsByteIndex == 6'h2c;
+  assign \$146  = slotsByteIndex == 6'h2d;
+  assign \$148  = slotsByteIndex == 6'h2e;
   assign \$14  = blockproc_processingCount & 6'h3f;
-  assign \$150  = slotsByteIndex == 4'hc;
-  assign \$152  = slotsByteIndex == 4'hd;
-  assign \$154  = slotsByteIndex == 4'he;
-  assign \$156  = slotsByteIndex == 4'hf;
-  assign \$158  = slotsByteIndex == 5'h10;
-  assign \$160  = slotsByteIndex == 5'h11;
-  assign \$162  = slotsByteIndex == 5'h12;
-  assign \$164  = slotsByteIndex == 5'h13;
-  assign \$166  = slotsByteIndex == 5'h14;
-  assign \$168  = slotsByteIndex == 5'h15;
+  assign \$150  = slotsByteIndex == 6'h2f;
+  assign \$152  = slotsByteIndex == 6'h30;
+  assign \$154  = slotsByteIndex == 6'h31;
+  assign \$156  = slotsByteIndex == 6'h32;
+  assign \$158  = slotsByteIndex == 6'h33;
+  assign \$160  = slotsByteIndex == 6'h34;
+  assign \$162  = slotsByteIndex == 6'h35;
+  assign \$164  = slotsByteIndex == 6'h36;
+  assign \$166  = slotsByteIndex == 6'h37;
+  assign \$168  = slotsByteIndex == 6'h38;
   assign \$16  = \$14  < 2'h2;
-  assign \$170  = slotsByteIndex == 5'h16;
-  assign \$172  = slotsByteIndex == 5'h17;
-  assign \$174  = slotsByteIndex == 5'h18;
-  assign \$176  = slotsByteIndex == 5'h19;
-  assign \$178  = slotsByteIndex == 5'h1a;
-  assign \$180  = slotsByteIndex == 5'h1b;
-  assign \$182  = slotsByteIndex == 5'h1c;
-  assign \$184  = slotsByteIndex == 5'h1d;
-  assign \$186  = slotsByteIndex == 5'h1e;
-  assign \$188  = slotsByteIndex == 5'h1f;
+  assign \$170  = slotsByteIndex == 6'h39;
+  assign \$172  = slotsByteIndex == 6'h3a;
+  assign \$174  = slotsByteIndex == 6'h3b;
+  assign \$176  = slotsByteIndex == 6'h3c;
+  assign \$178  = slotsByteIndex == 6'h3d;
+  assign \$180  = slotsByteIndex == 6'h3e;
+  assign \$182  = slotsByteIndex == 6'h3f;
+  assign \$184  = ~ clockinData;
+  assign \$186  = ~ dataInSeen;
+  assign \$188  = slotsByteIndex == 6'h3f;
   assign \$18  = beginProcessingDataBlock | \$16 ;
-  assign \$190  = slotsByteIndex == 6'h20;
-  assign \$192  = slotsByteIndex == 6'h21;
-  assign \$194  = slotsByteIndex == 6'h22;
-  assign \$196  = slotsByteIndex == 6'h23;
-  assign \$198  = slotsByteIndex == 6'h24;
-  assign \$200  = slotsByteIndex == 6'h25;
-  assign \$202  = slotsByteIndex == 6'h26;
-  assign \$204  = slotsByteIndex == 6'h27;
-  assign \$206  = slotsByteIndex == 6'h28;
-  assign \$208  = slotsByteIndex == 6'h29;
+  assign \$190  = ! slotsByteIndex;
+  assign \$192  = slotsByteIndex == 1'h1;
+  assign \$194  = slotsByteIndex == 2'h2;
+  assign \$196  = slotsByteIndex == 2'h3;
+  assign \$198  = slotsByteIndex == 3'h4;
+  assign \$200  = slotsByteIndex == 3'h5;
+  assign \$202  = slotsByteIndex == 3'h6;
+  assign \$204  = slotsByteIndex == 3'h7;
+  assign \$206  = slotsByteIndex == 4'h8;
+  assign \$208  = slotsByteIndex == 4'h9;
   assign \$20  = slotsByteIndex < 6'h3d;
-  assign \$210  = slotsByteIndex == 6'h2a;
-  assign \$212  = slotsByteIndex == 6'h2b;
-  assign \$214  = slotsByteIndex == 6'h2c;
-  assign \$216  = slotsByteIndex == 6'h2d;
-  assign \$218  = slotsByteIndex == 6'h2e;
-  assign \$220  = slotsByteIndex == 6'h2f;
-  assign \$222  = slotsByteIndex == 6'h30;
-  assign \$224  = slotsByteIndex == 6'h31;
-  assign \$226  = slotsByteIndex == 6'h32;
-  assign \$228  = slotsByteIndex == 6'h33;
+  assign \$210  = slotsByteIndex == 4'ha;
+  assign \$212  = slotsByteIndex == 4'hb;
+  assign \$214  = slotsByteIndex == 4'hc;
+  assign \$216  = slotsByteIndex == 4'hd;
+  assign \$218  = slotsByteIndex == 4'he;
+  assign \$220  = slotsByteIndex == 4'hf;
+  assign \$222  = slotsByteIndex == 5'h10;
+  assign \$224  = slotsByteIndex == 5'h11;
+  assign \$226  = slotsByteIndex == 5'h12;
+  assign \$228  = slotsByteIndex == 5'h13;
   assign \$22  = ~ clockinData;
-  assign \$230  = slotsByteIndex == 6'h34;
-  assign \$232  = slotsByteIndex == 6'h35;
-  assign \$234  = slotsByteIndex == 6'h36;
-  assign \$236  = slotsByteIndex == 6'h37;
-  assign \$238  = slotsByteIndex == 6'h38;
-  assign \$240  = slotsByteIndex == 6'h39;
-  assign \$242  = slotsByteIndex == 6'h3a;
-  assign \$244  = slotsByteIndex == 6'h3b;
-  assign \$246  = slotsByteIndex == 6'h3c;
-  assign \$248  = slotsByteIndex == 6'h3d;
+  assign \$230  = slotsByteIndex == 5'h14;
+  assign \$232  = slotsByteIndex == 5'h15;
+  assign \$234  = slotsByteIndex == 5'h16;
+  assign \$236  = slotsByteIndex == 5'h17;
+  assign \$238  = slotsByteIndex == 5'h18;
+  assign \$240  = slotsByteIndex == 5'h19;
+  assign \$242  = slotsByteIndex == 5'h1a;
+  assign \$244  = slotsByteIndex == 5'h1b;
+  assign \$246  = slotsByteIndex == 5'h1c;
+  assign \$248  = slotsByteIndex == 5'h1d;
   assign \$24  = ~ dataInSeen;
-  assign \$250  = slotsByteIndex == 6'h3e;
-  assign \$252  = slotsByteIndex == 6'h3f;
-  assign \$254  = ~ clockinData;
-  assign \$256  = ~ dataInSeen;
-  assign \$258  = slotsByteIndex == 6'h3f;
-  assign \$260  = ! slotsByteIndex;
-  assign \$262  = slotsByteIndex == 1'h1;
-  assign \$264  = slotsByteIndex == 2'h2;
-  assign \$266  = slotsByteIndex == 2'h3;
-  assign \$268  = slotsByteIndex == 3'h4;
+  assign \$250  = slotsByteIndex == 5'h1e;
+  assign \$252  = slotsByteIndex == 5'h1f;
+  assign \$254  = slotsByteIndex == 6'h20;
+  assign \$256  = slotsByteIndex == 6'h21;
+  assign \$258  = slotsByteIndex == 6'h22;
+  assign \$260  = slotsByteIndex == 6'h23;
+  assign \$262  = slotsByteIndex == 6'h24;
+  assign \$264  = slotsByteIndex == 6'h25;
+  assign \$266  = slotsByteIndex == 6'h26;
+  assign \$268  = slotsByteIndex == 6'h27;
   assign \$26  = slotsByteIndex == 6'h3f;
-  assign \$270  = slotsByteIndex == 3'h5;
-  assign \$272  = slotsByteIndex == 3'h6;
-  assign \$274  = slotsByteIndex == 3'h7;
-  assign \$276  = slotsByteIndex == 4'h8;
-  assign \$278  = slotsByteIndex == 4'h9;
-  assign \$280  = slotsByteIndex == 4'ha;
-  assign \$282  = slotsByteIndex == 4'hb;
-  assign \$284  = slotsByteIndex == 4'hc;
-  assign \$286  = slotsByteIndex == 4'hd;
-  assign \$288  = slotsByteIndex == 4'he;
-  assign \$290  = slotsByteIndex == 4'hf;
-  assign \$292  = slotsByteIndex == 5'h10;
-  assign \$294  = slotsByteIndex == 5'h11;
-  assign \$296  = slotsByteIndex == 5'h12;
-  assign \$298  = slotsByteIndex == 5'h13;
+  assign \$270  = slotsByteIndex == 6'h28;
+  assign \$272  = slotsByteIndex == 6'h29;
+  assign \$274  = slotsByteIndex == 6'h2a;
+  assign \$276  = slotsByteIndex == 6'h2b;
+  assign \$278  = slotsByteIndex == 6'h2c;
+  assign \$280  = slotsByteIndex == 6'h2d;
+  assign \$282  = slotsByteIndex == 6'h2e;
+  assign \$284  = slotsByteIndex == 6'h2f;
+  assign \$286  = slotsByteIndex == 6'h30;
+  assign \$288  = slotsByteIndex == 6'h31;
+  assign \$290  = slotsByteIndex == 6'h32;
+  assign \$292  = slotsByteIndex == 6'h33;
+  assign \$294  = slotsByteIndex == 6'h34;
+  assign \$296  = slotsByteIndex == 6'h35;
+  assign \$298  = slotsByteIndex == 6'h36;
   assign \$2  = beginProcessingDataBlock | processingReceivedDataBlock;
   assign \$29  = slotsByteIndex + 1'h1;
-  assign \$300  = slotsByteIndex == 5'h14;
-  assign \$302  = slotsByteIndex == 5'h15;
-  assign \$304  = slotsByteIndex == 5'h16;
-  assign \$306  = slotsByteIndex == 5'h17;
-  assign \$308  = slotsByteIndex == 5'h18;
-  assign \$310  = slotsByteIndex == 5'h19;
-  assign \$312  = slotsByteIndex == 5'h1a;
-  assign \$314  = slotsByteIndex == 5'h1b;
-  assign \$316  = slotsByteIndex == 5'h1c;
-  assign \$318  = slotsByteIndex == 5'h1d;
+  assign \$300  = slotsByteIndex == 6'h37;
+  assign \$302  = slotsByteIndex == 6'h38;
+  assign \$304  = slotsByteIndex == 6'h39;
+  assign \$306  = slotsByteIndex == 6'h3a;
+  assign \$308  = slotsByteIndex == 6'h3b;
+  assign \$310  = slotsByteIndex == 6'h3c;
+  assign \$312  = slotsByteIndex == 6'h3d;
+  assign \$314  = slotsByteIndex == 6'h3e;
+  assign \$316  = slotsByteIndex == 6'h3f;
+  assign \$318  = beginProcessingDataBlock | processingReceivedDataBlock;
   assign \$31  = ~ clockinData;
-  assign \$320  = slotsByteIndex == 5'h1e;
-  assign \$322  = slotsByteIndex == 5'h1f;
-  assign \$324  = slotsByteIndex == 6'h20;
-  assign \$326  = slotsByteIndex == 6'h21;
-  assign \$328  = slotsByteIndex == 6'h22;
-  assign \$330  = slotsByteIndex == 6'h23;
-  assign \$332  = slotsByteIndex == 6'h24;
-  assign \$334  = slotsByteIndex == 6'h25;
-  assign \$336  = slotsByteIndex == 6'h26;
-  assign \$338  = slotsByteIndex == 6'h27;
+  assign \$320  = beginProcessingDataBlock | processingReceivedDataBlock;
+  assign \$322  = beginProcessingDataBlock | processingReceivedDataBlock;
+  assign \$324  = beginProcessingDataBlock | processingReceivedDataBlock;
+  assign \$326  = blockproc_processingCount & 6'h3f;
+  assign \$328  = \$326  < 2'h2;
+  assign \$330  = beginProcessingDataBlock | \$328 ;
+  assign \$332  = slotsByteIndex < 6'h3d;
+  assign \$334  = ~ clockinData;
+  assign \$336  = ~ dataInSeen;
+  assign \$338  = slotsByteIndex == 6'h3f;
   assign \$33  = ~ dataInSeen;
-  assign \$340  = slotsByteIndex == 6'h28;
-  assign \$342  = slotsByteIndex == 6'h29;
-  assign \$344  = slotsByteIndex == 6'h2a;
-  assign \$346  = slotsByteIndex == 6'h2b;
-  assign \$348  = slotsByteIndex == 6'h2c;
-  assign \$350  = slotsByteIndex == 6'h2d;
-  assign \$352  = slotsByteIndex == 6'h2e;
-  assign \$354  = slotsByteIndex == 6'h2f;
-  assign \$356  = slotsByteIndex == 6'h30;
-  assign \$358  = slotsByteIndex == 6'h31;
+  assign \$340  = ~ clockinData;
+  assign \$342  = ~ dataInSeen;
+  assign \$344  = slotsByteIndex == 6'h3f;
+  assign \$346  = beginProcessingDataBlock | processingReceivedDataBlock;
+  assign \$348  = blockproc_processingCount & 6'h3f;
+  assign \$350  = \$348  < 2'h2;
+  assign \$352  = beginProcessingDataBlock | \$350 ;
+  assign \$354  = slotsByteIndex < 6'h3d;
+  assign \$356  = ~ clockinData;
+  assign \$358  = ~ dataInSeen;
   assign \$35  = slotsByteIndex == 6'h3f;
-  assign \$360  = slotsByteIndex == 6'h32;
-  assign \$362  = slotsByteIndex == 6'h33;
-  assign \$364  = slotsByteIndex == 6'h34;
-  assign \$366  = slotsByteIndex == 6'h35;
-  assign \$368  = slotsByteIndex == 6'h36;
-  assign \$370  = slotsByteIndex == 6'h37;
-  assign \$372  = slotsByteIndex == 6'h38;
-  assign \$374  = slotsByteIndex == 6'h39;
-  assign \$376  = slotsByteIndex == 6'h3a;
-  assign \$378  = slotsByteIndex == 6'h3b;
-  assign \$380  = slotsByteIndex == 6'h3c;
-  assign \$382  = slotsByteIndex == 6'h3d;
-  assign \$384  = slotsByteIndex == 6'h3e;
-  assign \$386  = slotsByteIndex == 6'h3f;
+  assign \$360  = slotsByteIndex == 6'h3f;
+  assign \$362  = ~ clockinData;
+  assign \$364  = ~ dataInSeen;
+  assign \$366  = slotsByteIndex == 6'h3f;
+  assign \$368  = beginProcessingDataBlock | processingReceivedDataBlock;
+  assign \$370  = beginProcessingDataBlock | processingReceivedDataBlock;
+  assign \$372  = blockproc_processingCount & 6'h3f;
+  assign \$374  = \$372  < 2'h2;
+  assign \$376  = beginProcessingDataBlock | \$374 ;
+  assign \$378  = slotsByteIndex < 6'h3d;
+  assign \$380  = ~ clockinData;
+  assign \$382  = ~ dataInSeen;
+  assign \$384  = ~ clockinData;
+  assign \$386  = ~ dataInSeen;
   assign \$38  = slotsByteIndex + 1'h1;
   assign \$1  = ~ \$2 ;
   assign \$40  = beginProcessingDataBlock | processingReceivedDataBlock;
-  assign \$42  = beginProcessingDataBlock | processingReceivedDataBlock;
-  assign \$44  = beginProcessingDataBlock | processingReceivedDataBlock;
-  assign \$46  = blockproc_processingCount & 6'h3f;
-  assign \$48  = \$46  < 2'h2;
-  assign \$50  = beginProcessingDataBlock | \$48 ;
-  assign \$52  = slotsByteIndex < 6'h3d;
-  assign \$54  = ~ clockinData;
-  assign \$56  = ~ dataInSeen;
-  assign \$58  = slotsByteIndex == 6'h3f;
+  assign \$42  = blockproc_processingCount & 6'h3f;
+  assign \$44  = \$42  < 2'h2;
+  assign \$46  = beginProcessingDataBlock | \$44 ;
+  assign \$48  = slotsByteIndex < 6'h3d;
+  assign \$50  = ~ clockinData;
+  assign \$52  = ~ dataInSeen;
+  assign \$54  = slotsByteIndex == 6'h3f;
+  assign \$56  = ! slotsByteIndex;
+  assign \$58  = slotsByteIndex == 1'h1;
   assign \$5  = ~ resultIncrementSeen;
-  assign \$60  = ~ clockinData;
-  assign \$62  = ~ dataInSeen;
-  assign \$64  = slotsByteIndex == 6'h3f;
-  assign \$66  = beginProcessingDataBlock | processingReceivedDataBlock;
-  assign \$68  = blockproc_processingCount & 6'h3f;
-  assign \$70  = \$68  < 2'h2;
-  assign \$72  = beginProcessingDataBlock | \$70 ;
-  assign \$74  = slotsByteIndex < 6'h3d;
-  assign \$76  = ~ clockinData;
-  assign \$78  = ~ dataInSeen;
+  assign \$60  = slotsByteIndex == 2'h2;
+  assign \$62  = slotsByteIndex == 2'h3;
+  assign \$64  = slotsByteIndex == 3'h4;
+  assign \$66  = slotsByteIndex == 3'h5;
+  assign \$68  = slotsByteIndex == 3'h6;
+  assign \$70  = slotsByteIndex == 3'h7;
+  assign \$72  = slotsByteIndex == 4'h8;
+  assign \$74  = slotsByteIndex == 4'h9;
+  assign \$76  = slotsByteIndex == 4'ha;
+  assign \$78  = slotsByteIndex == 4'hb;
   assign \$7  = ~ resultIncrementSeen;
-  assign \$80  = slotsByteIndex == 6'h3f;
-  assign \$82  = ~ clockinData;
-  assign \$84  = ~ dataInSeen;
-  assign \$86  = slotsByteIndex == 6'h3f;
-  assign \$88  = beginProcessingDataBlock | processingReceivedDataBlock;
-  assign \$90  = beginProcessingDataBlock | processingReceivedDataBlock;
-  assign \$92  = beginProcessingDataBlock | processingReceivedDataBlock;
-  assign \$94  = blockproc_processingCount & 6'h3f;
-  assign \$96  = \$94  < 2'h2;
-  assign \$98  = beginProcessingDataBlock | \$96 ;
+  assign \$80  = slotsByteIndex == 4'hc;
+  assign \$82  = slotsByteIndex == 4'hd;
+  assign \$84  = slotsByteIndex == 4'he;
+  assign \$86  = slotsByteIndex == 4'hf;
+  assign \$88  = slotsByteIndex == 5'h10;
+  assign \$90  = slotsByteIndex == 5'h11;
+  assign \$92  = slotsByteIndex == 5'h12;
+  assign \$94  = slotsByteIndex == 5'h13;
+  assign \$96  = slotsByteIndex == 5'h14;
+  assign \$98  = slotsByteIndex == 5'h15;
   always @(posedge clk)
-    apibuf <= \apibuf$next ;
+    dataInSeen <= \dataInSeen$next ;
   always @(posedge clk)
     resultbyteOut <= \resultbyteOut$next ;
   always @(posedge clk)
     resultIndex <= \resultIndex$next ;
   always @(posedge clk)
     resultIncrementSeen <= \resultIncrementSeen$next ;
-  always @(posedge clk)
-    dataInSeen <= \dataInSeen$next ;
-  always @(posedge clk)
-    blockproc_initBufferReady <= \blockproc_initBufferReady$next ;
   always @(posedge clk)
     blockproc_bp_initdat <= \blockproc_bp_initdat$next ;
   always @(posedge clk)
@@ -1851,6 +1778,10 @@ module shapi(rst, databyteIn, resultbyteOut, resultReady, beginProcessingDataBlo
     processingReceivedDataBlock <= \processingReceivedDataBlock$next ;
   always @(posedge clk)
     blockproc_doProcessBlock <= \blockproc_doProcessBlock$next ;
+  always @(posedge clk)
+    blockproc_initBufferReady <= \blockproc_initBufferReady$next ;
+  always @(posedge clk)
+    apibuf <= \apibuf$next ;
   always @(posedge clk)
     slotsByteIndex <= \slotsByteIndex$next ;
   blockproc blockproc (
@@ -1873,1168 +1804,45 @@ module shapi(rst, databyteIn, resultbyteOut, resultReady, beginProcessingDataBlo
   );
   always @* begin
     if (\$auto$verilog_backend.cc:2083:dump_module$63 ) begin end
-    \blockproc_bp_initdat$next  = blockproc_bp_initdat;
-    (* full_case = 32'd1 *)
-    casez (start)
-      /* src = "shaman/api.py:197" */
-      1'h1:
-          /* empty */;
-      /* src = "shaman/api.py:206" */
-      default:
-          casez (\$88 )
-            /* src = "shaman/api.py:210" */
-            1'h1:
-                casez (beginProcessingDataBlock)
-                  /* src = "shaman/api.py:80" */
-                  1'h1:
-                      \blockproc_bp_initdat$next  = apibuf;
-                endcase
-          endcase
-    endcase
-    casez (rst)
-      1'h1:
-          \blockproc_bp_initdat$next  = 512'h00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2083:dump_module$63 ) begin end
-    \blockproc_initBufferReady$next  = blockproc_initBufferReady;
-    (* full_case = 32'd1 *)
-    casez (start)
-      /* src = "shaman/api.py:197" */
-      1'h1:
-          /* empty */;
-      /* src = "shaman/api.py:206" */
-      default:
-          casez (\$90 )
-            /* src = "shaman/api.py:210" */
-            1'h1:
-                (* full_case = 32'd1 *)
-                casez (beginProcessingDataBlock)
-                  /* src = "shaman/api.py:80" */
-                  1'h1:
-                      \blockproc_initBufferReady$next  = 1'h1;
-                  /* src = "shaman/api.py:90" */
-                  default:
-                      \blockproc_initBufferReady$next  = 1'h0;
-                endcase
-          endcase
-    endcase
-    casez (rst)
-      1'h1:
-          \blockproc_initBufferReady$next  = 1'h0;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2083:dump_module$63 ) begin end
-    \dataInSeen$next  = dataInSeen;
-    (* full_case = 32'd1 *)
-    casez (start)
-      /* src = "shaman/api.py:197" */
-      1'h1:
-          /* empty */;
-      /* src = "shaman/api.py:206" */
-      default:
-          (* full_case = 32'd1 *)
-          casez (\$92 )
-            /* src = "shaman/api.py:210" */
-            1'h1:
-                casez (parallelLoading)
-                  /* src = "shaman/api.py:213" */
-                  1'h1:
-                      casez ({ \$100 , \$98  })
-                        /* src = "shaman/api.py:214" */
-                        2'b?1:
-                            /* empty */;
-                        /* src = "shaman/api.py:216" */
-                        2'b1?:
-                            (* full_case = 32'd1 *)
-                            casez (\$102 )
-                              /* src = "shaman/api.py:106" */
-                              1'h1:
-                                  \dataInSeen$next  = 1'h0;
-                              /* src = "shaman/api.py:111" */
-                              default:
-                                  casez (\$104 )
-                                    /* src = "shaman/api.py:114" */
-                                    1'h1:
-                                        \dataInSeen$next  = 1'h1;
-                                  endcase
-                            endcase
-                      endcase
-                endcase
-            /* src = "shaman/api.py:223" */
-            default:
-                (* full_case = 32'd1 *)
-                casez (\$106 )
-                  /* src = "shaman/api.py:106" */
-                  1'h1:
-                      \dataInSeen$next  = 1'h0;
-                  /* src = "shaman/api.py:111" */
-                  default:
-                      casez (\$108 )
-                        /* src = "shaman/api.py:114" */
-                        1'h1:
-                            \dataInSeen$next  = 1'h1;
-                      endcase
-                endcase
-          endcase
-    endcase
-    casez (rst)
-      1'h1:
-          \dataInSeen$next  = 1'h0;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2083:dump_module$63 ) begin end
-    \apibuf$next  = apibuf;
-    (* full_case = 32'd1 *)
-    casez (start)
-      /* src = "shaman/api.py:197" */
-      1'h1:
-          /* empty */;
-      /* src = "shaman/api.py:206" */
-      default:
-          (* full_case = 32'd1 *)
-          casez (\$110 )
-            /* src = "shaman/api.py:210" */
-            1'h1:
-                casez (parallelLoading)
-                  /* src = "shaman/api.py:213" */
-                  1'h1:
-                      casez ({ \$118 , \$116  })
-                        /* src = "shaman/api.py:214" */
-                        2'b?1:
-                            /* empty */;
-                        /* src = "shaman/api.py:216" */
-                        2'b1?:
-                            (* full_case = 32'd1 *)
-                            casez (\$120 )
-                              /* src = "shaman/api.py:106" */
-                              1'h1:
-                                  /* empty */;
-                              /* src = "shaman/api.py:111" */
-                              default:
-                                  casez (\$122 )
-                                    /* src = "shaman/api.py:114" */
-                                    1'h1:
-                                        (* full_case = 32'd1 *)
-                                        casez (\$124 )
-                                          /* src = "shaman/api.py:121" */
-                                          1'h1:
-                                              \apibuf$next [7:0] = databyteIn;
-                                          /* src = "shaman/api.py:130" */
-                                          default:
-                                            begin
-                                              casez (\$126 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [511:504] = databyteIn;
-                                              endcase
-                                              casez (\$128 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [503:496] = databyteIn;
-                                              endcase
-                                              casez (\$130 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [495:488] = databyteIn;
-                                              endcase
-                                              casez (\$132 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [487:480] = databyteIn;
-                                              endcase
-                                              casez (\$134 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [479:472] = databyteIn;
-                                              endcase
-                                              casez (\$136 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [471:464] = databyteIn;
-                                              endcase
-                                              casez (\$138 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [463:456] = databyteIn;
-                                              endcase
-                                              casez (\$140 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [455:448] = databyteIn;
-                                              endcase
-                                              casez (\$142 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [447:440] = databyteIn;
-                                              endcase
-                                              casez (\$144 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [439:432] = databyteIn;
-                                              endcase
-                                              casez (\$146 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [431:424] = databyteIn;
-                                              endcase
-                                              casez (\$148 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [423:416] = databyteIn;
-                                              endcase
-                                              casez (\$150 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [415:408] = databyteIn;
-                                              endcase
-                                              casez (\$152 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [407:400] = databyteIn;
-                                              endcase
-                                              casez (\$154 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [399:392] = databyteIn;
-                                              endcase
-                                              casez (\$156 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [391:384] = databyteIn;
-                                              endcase
-                                              casez (\$158 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [383:376] = databyteIn;
-                                              endcase
-                                              casez (\$160 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [375:368] = databyteIn;
-                                              endcase
-                                              casez (\$162 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [367:360] = databyteIn;
-                                              endcase
-                                              casez (\$164 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [359:352] = databyteIn;
-                                              endcase
-                                              casez (\$166 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [351:344] = databyteIn;
-                                              endcase
-                                              casez (\$168 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [343:336] = databyteIn;
-                                              endcase
-                                              casez (\$170 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [335:328] = databyteIn;
-                                              endcase
-                                              casez (\$172 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [327:320] = databyteIn;
-                                              endcase
-                                              casez (\$174 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [319:312] = databyteIn;
-                                              endcase
-                                              casez (\$176 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [311:304] = databyteIn;
-                                              endcase
-                                              casez (\$178 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [303:296] = databyteIn;
-                                              endcase
-                                              casez (\$180 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [295:288] = databyteIn;
-                                              endcase
-                                              casez (\$182 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [287:280] = databyteIn;
-                                              endcase
-                                              casez (\$184 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [279:272] = databyteIn;
-                                              endcase
-                                              casez (\$186 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [271:264] = databyteIn;
-                                              endcase
-                                              casez (\$188 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [263:256] = databyteIn;
-                                              endcase
-                                              casez (\$190 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [255:248] = databyteIn;
-                                              endcase
-                                              casez (\$192 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [247:240] = databyteIn;
-                                              endcase
-                                              casez (\$194 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [239:232] = databyteIn;
-                                              endcase
-                                              casez (\$196 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [231:224] = databyteIn;
-                                              endcase
-                                              casez (\$198 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [223:216] = databyteIn;
-                                              endcase
-                                              casez (\$200 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [215:208] = databyteIn;
-                                              endcase
-                                              casez (\$202 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [207:200] = databyteIn;
-                                              endcase
-                                              casez (\$204 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [199:192] = databyteIn;
-                                              endcase
-                                              casez (\$206 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [191:184] = databyteIn;
-                                              endcase
-                                              casez (\$208 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [183:176] = databyteIn;
-                                              endcase
-                                              casez (\$210 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [175:168] = databyteIn;
-                                              endcase
-                                              casez (\$212 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [167:160] = databyteIn;
-                                              endcase
-                                              casez (\$214 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [159:152] = databyteIn;
-                                              endcase
-                                              casez (\$216 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [151:144] = databyteIn;
-                                              endcase
-                                              casez (\$218 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [143:136] = databyteIn;
-                                              endcase
-                                              casez (\$220 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [135:128] = databyteIn;
-                                              endcase
-                                              casez (\$222 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [127:120] = databyteIn;
-                                              endcase
-                                              casez (\$224 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [119:112] = databyteIn;
-                                              endcase
-                                              casez (\$226 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [111:104] = databyteIn;
-                                              endcase
-                                              casez (\$228 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [103:96] = databyteIn;
-                                              endcase
-                                              casez (\$230 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [95:88] = databyteIn;
-                                              endcase
-                                              casez (\$232 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [87:80] = databyteIn;
-                                              endcase
-                                              casez (\$234 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [79:72] = databyteIn;
-                                              endcase
-                                              casez (\$236 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [71:64] = databyteIn;
-                                              endcase
-                                              casez (\$238 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [63:56] = databyteIn;
-                                              endcase
-                                              casez (\$240 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [55:48] = databyteIn;
-                                              endcase
-                                              casez (\$242 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [47:40] = databyteIn;
-                                              endcase
-                                              casez (\$244 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [39:32] = databyteIn;
-                                              endcase
-                                              casez (\$246 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [31:24] = databyteIn;
-                                              endcase
-                                              casez (\$248 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [23:16] = databyteIn;
-                                              endcase
-                                              casez (\$250 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [15:8] = databyteIn;
-                                              endcase
-                                              casez (\$252 )
-                                                /* src = "shaman/api.py:133" */
-                                                1'h1:
-                                                    \apibuf$next [7:0] = databyteIn;
-                                              endcase
-                                            end
-                                        endcase
-                                  endcase
-                            endcase
-                      endcase
-                endcase
-            /* src = "shaman/api.py:223" */
-            default:
-                (* full_case = 32'd1 *)
-                casez (\$254 )
-                  /* src = "shaman/api.py:106" */
-                  1'h1:
-                      /* empty */;
-                  /* src = "shaman/api.py:111" */
-                  default:
-                      casez (\$256 )
-                        /* src = "shaman/api.py:114" */
-                        1'h1:
-                            (* full_case = 32'd1 *)
-                            casez (\$258 )
-                              /* src = "shaman/api.py:121" */
-                              1'h1:
-                                  \apibuf$next [7:0] = databyteIn;
-                              /* src = "shaman/api.py:130" */
-                              default:
-                                begin
-                                  casez (\$260 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [511:504] = databyteIn;
-                                  endcase
-                                  casez (\$262 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [503:496] = databyteIn;
-                                  endcase
-                                  casez (\$264 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [495:488] = databyteIn;
-                                  endcase
-                                  casez (\$266 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [487:480] = databyteIn;
-                                  endcase
-                                  casez (\$268 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [479:472] = databyteIn;
-                                  endcase
-                                  casez (\$270 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [471:464] = databyteIn;
-                                  endcase
-                                  casez (\$272 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [463:456] = databyteIn;
-                                  endcase
-                                  casez (\$274 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [455:448] = databyteIn;
-                                  endcase
-                                  casez (\$276 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [447:440] = databyteIn;
-                                  endcase
-                                  casez (\$278 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [439:432] = databyteIn;
-                                  endcase
-                                  casez (\$280 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [431:424] = databyteIn;
-                                  endcase
-                                  casez (\$282 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [423:416] = databyteIn;
-                                  endcase
-                                  casez (\$284 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [415:408] = databyteIn;
-                                  endcase
-                                  casez (\$286 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [407:400] = databyteIn;
-                                  endcase
-                                  casez (\$288 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [399:392] = databyteIn;
-                                  endcase
-                                  casez (\$290 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [391:384] = databyteIn;
-                                  endcase
-                                  casez (\$292 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [383:376] = databyteIn;
-                                  endcase
-                                  casez (\$294 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [375:368] = databyteIn;
-                                  endcase
-                                  casez (\$296 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [367:360] = databyteIn;
-                                  endcase
-                                  casez (\$298 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [359:352] = databyteIn;
-                                  endcase
-                                  casez (\$300 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [351:344] = databyteIn;
-                                  endcase
-                                  casez (\$302 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [343:336] = databyteIn;
-                                  endcase
-                                  casez (\$304 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [335:328] = databyteIn;
-                                  endcase
-                                  casez (\$306 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [327:320] = databyteIn;
-                                  endcase
-                                  casez (\$308 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [319:312] = databyteIn;
-                                  endcase
-                                  casez (\$310 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [311:304] = databyteIn;
-                                  endcase
-                                  casez (\$312 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [303:296] = databyteIn;
-                                  endcase
-                                  casez (\$314 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [295:288] = databyteIn;
-                                  endcase
-                                  casez (\$316 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [287:280] = databyteIn;
-                                  endcase
-                                  casez (\$318 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [279:272] = databyteIn;
-                                  endcase
-                                  casez (\$320 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [271:264] = databyteIn;
-                                  endcase
-                                  casez (\$322 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [263:256] = databyteIn;
-                                  endcase
-                                  casez (\$324 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [255:248] = databyteIn;
-                                  endcase
-                                  casez (\$326 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [247:240] = databyteIn;
-                                  endcase
-                                  casez (\$328 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [239:232] = databyteIn;
-                                  endcase
-                                  casez (\$330 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [231:224] = databyteIn;
-                                  endcase
-                                  casez (\$332 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [223:216] = databyteIn;
-                                  endcase
-                                  casez (\$334 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [215:208] = databyteIn;
-                                  endcase
-                                  casez (\$336 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [207:200] = databyteIn;
-                                  endcase
-                                  casez (\$338 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [199:192] = databyteIn;
-                                  endcase
-                                  casez (\$340 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [191:184] = databyteIn;
-                                  endcase
-                                  casez (\$342 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [183:176] = databyteIn;
-                                  endcase
-                                  casez (\$344 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [175:168] = databyteIn;
-                                  endcase
-                                  casez (\$346 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [167:160] = databyteIn;
-                                  endcase
-                                  casez (\$348 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [159:152] = databyteIn;
-                                  endcase
-                                  casez (\$350 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [151:144] = databyteIn;
-                                  endcase
-                                  casez (\$352 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [143:136] = databyteIn;
-                                  endcase
-                                  casez (\$354 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [135:128] = databyteIn;
-                                  endcase
-                                  casez (\$356 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [127:120] = databyteIn;
-                                  endcase
-                                  casez (\$358 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [119:112] = databyteIn;
-                                  endcase
-                                  casez (\$360 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [111:104] = databyteIn;
-                                  endcase
-                                  casez (\$362 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [103:96] = databyteIn;
-                                  endcase
-                                  casez (\$364 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [95:88] = databyteIn;
-                                  endcase
-                                  casez (\$366 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [87:80] = databyteIn;
-                                  endcase
-                                  casez (\$368 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [79:72] = databyteIn;
-                                  endcase
-                                  casez (\$370 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [71:64] = databyteIn;
-                                  endcase
-                                  casez (\$372 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [63:56] = databyteIn;
-                                  endcase
-                                  casez (\$374 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [55:48] = databyteIn;
-                                  endcase
-                                  casez (\$376 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [47:40] = databyteIn;
-                                  endcase
-                                  casez (\$378 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [39:32] = databyteIn;
-                                  endcase
-                                  casez (\$380 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [31:24] = databyteIn;
-                                  endcase
-                                  casez (\$382 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [23:16] = databyteIn;
-                                  endcase
-                                  casez (\$384 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [15:8] = databyteIn;
-                                  endcase
-                                  casez (\$386 )
-                                    /* src = "shaman/api.py:133" */
-                                    1'h1:
-                                        \apibuf$next [7:0] = databyteIn;
-                                  endcase
-                                end
-                            endcase
-                      endcase
-                endcase
-          endcase
-    endcase
-    casez (rst)
-      1'h1:
-          \apibuf$next  = 512'h00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2083:dump_module$63 ) begin end
-    \resultIncrementSeen$next  = resultIncrementSeen;
-    (* full_case = 32'd1 *)
-    casez (resultNext)
-      /* src = "shaman/api.py:164" */
-      1'h1:
-          casez (\$5 )
-            /* src = "shaman/api.py:165" */
-            1'h1:
-                \resultIncrementSeen$next  = 1'h1;
-          endcase
-      /* src = "shaman/api.py:171" */
-      default:
-          \resultIncrementSeen$next  = 1'h0;
-    endcase
-    casez (rst)
-      1'h1:
-          \resultIncrementSeen$next  = 1'h0;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2083:dump_module$63 ) begin end
-    \resultIndex$next  = resultIndex;
-    casez (resultNext)
-      /* src = "shaman/api.py:164" */
-      1'h1:
-          casez (\$7 )
-            /* src = "shaman/api.py:165" */
-            1'h1:
-                \resultIndex$next  = \$10 [4:0];
-          endcase
-    endcase
-    casez (start)
-      /* src = "shaman/api.py:197" */
-      1'h1:
-          \resultIndex$next  = 5'h00;
-    endcase
-    casez (rst)
-      1'h1:
-          \resultIndex$next  = 5'h00;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2083:dump_module$63 ) begin end
-    (* full_case = 32'd1 *)
-    casez (resultIndex)
-      /* src = "shaman/api.py:148" */
-      5'h00:
-          \resultbyteOut$next  = blockproc_hbuf0[31:24];
-      /* src = "shaman/api.py:148" */
-      5'h01:
-          \resultbyteOut$next  = blockproc_hbuf0[23:16];
-      /* src = "shaman/api.py:148" */
-      5'h02:
-          \resultbyteOut$next  = blockproc_hbuf0[15:8];
-      /* src = "shaman/api.py:148" */
-      5'h03:
-          \resultbyteOut$next  = blockproc_hbuf0[7:0];
-      /* src = "shaman/api.py:148" */
-      5'h04:
-          \resultbyteOut$next  = blockproc_hbuf1[31:24];
-      /* src = "shaman/api.py:148" */
-      5'h05:
-          \resultbyteOut$next  = blockproc_hbuf1[23:16];
-      /* src = "shaman/api.py:148" */
-      5'h06:
-          \resultbyteOut$next  = blockproc_hbuf1[15:8];
-      /* src = "shaman/api.py:148" */
-      5'h07:
-          \resultbyteOut$next  = blockproc_hbuf1[7:0];
-      /* src = "shaman/api.py:148" */
-      5'h08:
-          \resultbyteOut$next  = blockproc_hbuf2[31:24];
-      /* src = "shaman/api.py:148" */
-      5'h09:
-          \resultbyteOut$next  = blockproc_hbuf2[23:16];
-      /* src = "shaman/api.py:148" */
-      5'h0a:
-          \resultbyteOut$next  = blockproc_hbuf2[15:8];
-      /* src = "shaman/api.py:148" */
-      5'h0b:
-          \resultbyteOut$next  = blockproc_hbuf2[7:0];
-      /* src = "shaman/api.py:148" */
-      5'h0c:
-          \resultbyteOut$next  = blockproc_hbuf3[31:24];
-      /* src = "shaman/api.py:148" */
-      5'h0d:
-          \resultbyteOut$next  = blockproc_hbuf3[23:16];
-      /* src = "shaman/api.py:148" */
-      5'h0e:
-          \resultbyteOut$next  = blockproc_hbuf3[15:8];
-      /* src = "shaman/api.py:148" */
-      5'h0f:
-          \resultbyteOut$next  = blockproc_hbuf3[7:0];
-      /* src = "shaman/api.py:148" */
-      5'h10:
-          \resultbyteOut$next  = blockproc_hbuf4[31:24];
-      /* src = "shaman/api.py:148" */
-      5'h11:
-          \resultbyteOut$next  = blockproc_hbuf4[23:16];
-      /* src = "shaman/api.py:148" */
-      5'h12:
-          \resultbyteOut$next  = blockproc_hbuf4[15:8];
-      /* src = "shaman/api.py:148" */
-      5'h13:
-          \resultbyteOut$next  = blockproc_hbuf4[7:0];
-      /* src = "shaman/api.py:148" */
-      5'h14:
-          \resultbyteOut$next  = blockproc_hbuf5[31:24];
-      /* src = "shaman/api.py:148" */
-      5'h15:
-          \resultbyteOut$next  = blockproc_hbuf5[23:16];
-      /* src = "shaman/api.py:148" */
-      5'h16:
-          \resultbyteOut$next  = blockproc_hbuf5[15:8];
-      /* src = "shaman/api.py:148" */
-      5'h17:
-          \resultbyteOut$next  = blockproc_hbuf5[7:0];
-      /* src = "shaman/api.py:148" */
-      5'h18:
-          \resultbyteOut$next  = blockproc_hbuf6[31:24];
-      /* src = "shaman/api.py:148" */
-      5'h19:
-          \resultbyteOut$next  = blockproc_hbuf6[23:16];
-      /* src = "shaman/api.py:148" */
-      5'h1a:
-          \resultbyteOut$next  = blockproc_hbuf6[15:8];
-      /* src = "shaman/api.py:148" */
-      5'h1b:
-          \resultbyteOut$next  = blockproc_hbuf6[7:0];
-      /* src = "shaman/api.py:148" */
-      5'h1c:
-          \resultbyteOut$next  = blockproc_hbuf7[31:24];
-      /* src = "shaman/api.py:148" */
-      5'h1d:
-          \resultbyteOut$next  = blockproc_hbuf7[23:16];
-      /* src = "shaman/api.py:148" */
-      5'h1e:
-          \resultbyteOut$next  = blockproc_hbuf7[15:8];
-      /* src = "shaman/api.py:148" */
-      5'h1f:
-          \resultbyteOut$next  = blockproc_hbuf7[7:0];
-    endcase
-    casez (rst)
-      1'h1:
-          \resultbyteOut$next  = 8'h00;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2083:dump_module$63 ) begin end
-    \slotsByteIndex$next  = slotsByteIndex;
-    (* full_case = 32'd1 *)
-    casez (start)
-      /* src = "shaman/api.py:197" */
-      1'h1:
-          \slotsByteIndex$next  = 7'h00;
-      /* src = "shaman/api.py:206" */
-      default:
-          (* full_case = 32'd1 *)
-          casez (\$12 )
-            /* src = "shaman/api.py:210" */
-            1'h1:
-                casez (parallelLoading)
-                  /* src = "shaman/api.py:213" */
-                  1'h1:
-                      casez ({ \$20 , \$18  })
-                        /* src = "shaman/api.py:214" */
-                        2'b?1:
-                            /* empty */;
-                        /* src = "shaman/api.py:216" */
-                        2'b1?:
-                            (* full_case = 32'd1 *)
-                            casez (\$22 )
-                              /* src = "shaman/api.py:106" */
-                              1'h1:
-                                  /* empty */;
-                              /* src = "shaman/api.py:111" */
-                              default:
-                                  casez (\$24 )
-                                    /* src = "shaman/api.py:114" */
-                                    1'h1:
-                                        (* full_case = 32'd1 *)
-                                        casez (\$26 )
-                                          /* src = "shaman/api.py:121" */
-                                          1'h1:
-                                              \slotsByteIndex$next  = 7'h00;
-                                          /* src = "shaman/api.py:130" */
-                                          default:
-                                              \slotsByteIndex$next  = \$29 [6:0];
-                                        endcase
-                                  endcase
-                            endcase
-                      endcase
-                endcase
-            /* src = "shaman/api.py:223" */
-            default:
-                (* full_case = 32'd1 *)
-                casez (\$31 )
-                  /* src = "shaman/api.py:106" */
-                  1'h1:
-                      /* empty */;
-                  /* src = "shaman/api.py:111" */
-                  default:
-                      casez (\$33 )
-                        /* src = "shaman/api.py:114" */
-                        1'h1:
-                            (* full_case = 32'd1 *)
-                            casez (\$35 )
-                              /* src = "shaman/api.py:121" */
-                              1'h1:
-                                  \slotsByteIndex$next  = 7'h00;
-                              /* src = "shaman/api.py:130" */
-                              default:
-                                  \slotsByteIndex$next  = \$38 [6:0];
-                            endcase
-                      endcase
-                endcase
-          endcase
-    endcase
-    casez (rst)
-      1'h1:
-          \slotsByteIndex$next  = 7'h00;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2083:dump_module$63 ) begin end
-    \blockproc_doProcessBlock$next  = blockproc_doProcessBlock;
-    (* full_case = 32'd1 *)
-    casez (start)
-      /* src = "shaman/api.py:197" */
-      1'h1:
-          \blockproc_doProcessBlock$next  = 1'h0;
-      /* src = "shaman/api.py:206" */
-      default:
-          casez (\$40 )
-            /* src = "shaman/api.py:210" */
-            1'h1:
-                (* full_case = 32'd1 *)
-                casez (beginProcessingDataBlock)
-                  /* src = "shaman/api.py:80" */
-                  1'h1:
-                      \blockproc_doProcessBlock$next  = 1'h1;
-                  /* src = "shaman/api.py:90" */
-                  default:
-                      casez (blockproc_bp_outrdy)
-                        /* src = "shaman/api.py:94" */
-                        1'h1:
-                            \blockproc_doProcessBlock$next  = 1'h0;
-                      endcase
-                endcase
-          endcase
-    endcase
-    casez (rst)
-      1'h1:
-          \blockproc_doProcessBlock$next  = 1'h0;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2083:dump_module$63 ) begin end
-    \processingReceivedDataBlock$next  = processingReceivedDataBlock;
-    (* full_case = 32'd1 *)
-    casez (start)
-      /* src = "shaman/api.py:197" */
-      1'h1:
-          \processingReceivedDataBlock$next  = 1'h0;
-      /* src = "shaman/api.py:206" */
-      default:
-          casez (\$42 )
-            /* src = "shaman/api.py:210" */
-            1'h1:
-                (* full_case = 32'd1 *)
-                casez (beginProcessingDataBlock)
-                  /* src = "shaman/api.py:80" */
-                  1'h1:
-                      \processingReceivedDataBlock$next  = 1'h1;
-                  /* src = "shaman/api.py:90" */
-                  default:
-                      casez (blockproc_bp_outrdy)
-                        /* src = "shaman/api.py:94" */
-                        1'h1:
-                            \processingReceivedDataBlock$next  = 1'h0;
-                      endcase
-                endcase
-          endcase
-    endcase
-    casez (rst)
-      1'h1:
-          \processingReceivedDataBlock$next  = 1'h0;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2083:dump_module$63 ) begin end
     \beginProcessingDataBlock$next  = beginProcessingDataBlock;
     (* full_case = 32'd1 *)
     casez (start)
-      /* src = "shaman/api.py:197" */
+      /* src = "shaman/api.py:198" */
       1'h1:
           \beginProcessingDataBlock$next  = 1'h0;
-      /* src = "shaman/api.py:206" */
+      /* src = "shaman/api.py:209" */
       default:
           (* full_case = 32'd1 *)
-          casez (\$44 )
-            /* src = "shaman/api.py:210" */
+          casez (\$324 )
+            /* src = "shaman/api.py:213" */
             1'h1:
               begin
                 casez (beginProcessingDataBlock)
-                  /* src = "shaman/api.py:80" */
+                  /* src = "shaman/api.py:81" */
                   1'h1:
                       \beginProcessingDataBlock$next  = 1'h0;
                 endcase
                 casez (parallelLoading)
-                  /* src = "shaman/api.py:213" */
+                  /* src = "shaman/api.py:216" */
                   1'h1:
-                      casez ({ \$52 , \$50  })
-                        /* src = "shaman/api.py:214" */
+                      casez ({ \$332 , \$330  })
+                        /* src = "shaman/api.py:217" */
                         2'b?1:
                             /* empty */;
-                        /* src = "shaman/api.py:216" */
+                        /* src = "shaman/api.py:219" */
                         2'b1?:
                             (* full_case = 32'd1 *)
-                            casez (\$54 )
-                              /* src = "shaman/api.py:106" */
+                            casez (\$334 )
+                              /* src = "shaman/api.py:107" */
                               1'h1:
                                   /* empty */;
-                              /* src = "shaman/api.py:111" */
+                              /* src = "shaman/api.py:112" */
                               default:
-                                  casez (\$56 )
-                                    /* src = "shaman/api.py:114" */
+                                  casez (\$336 )
+                                    /* src = "shaman/api.py:115" */
                                     1'h1:
-                                        casez (\$58 )
-                                          /* src = "shaman/api.py:121" */
+                                        casez (\$338 )
+                                          /* src = "shaman/api.py:122" */
                                           1'h1:
                                               \beginProcessingDataBlock$next  = 1'h1;
                                         endcase
@@ -3043,20 +1851,20 @@ module shapi(rst, databyteIn, resultbyteOut, resultReady, beginProcessingDataBlo
                       endcase
                 endcase
               end
-            /* src = "shaman/api.py:223" */
+            /* src = "shaman/api.py:226" */
             default:
                 (* full_case = 32'd1 *)
-                casez (\$60 )
-                  /* src = "shaman/api.py:106" */
+                casez (\$340 )
+                  /* src = "shaman/api.py:107" */
                   1'h1:
                       /* empty */;
-                  /* src = "shaman/api.py:111" */
+                  /* src = "shaman/api.py:112" */
                   default:
-                      casez (\$62 )
-                        /* src = "shaman/api.py:114" */
+                      casez (\$342 )
+                        /* src = "shaman/api.py:115" */
                         1'h1:
-                            casez (\$64 )
-                              /* src = "shaman/api.py:121" */
+                            casez (\$344 )
+                              /* src = "shaman/api.py:122" */
                               1'h1:
                                   \beginProcessingDataBlock$next  = 1'h1;
                             endcase
@@ -3074,66 +1882,66 @@ module shapi(rst, databyteIn, resultbyteOut, resultReady, beginProcessingDataBlo
     \busy$next  = busy;
     (* full_case = 32'd1 *)
     casez (start)
-      /* src = "shaman/api.py:197" */
+      /* src = "shaman/api.py:198" */
       1'h1:
           \busy$next  = 1'h0;
-      /* src = "shaman/api.py:206" */
+      /* src = "shaman/api.py:209" */
       default:
           (* full_case = 32'd1 *)
-          casez (\$66 )
-            /* src = "shaman/api.py:210" */
+          casez (\$346 )
+            /* src = "shaman/api.py:213" */
             1'h1:
                 casez (parallelLoading)
-                  /* src = "shaman/api.py:213" */
+                  /* src = "shaman/api.py:216" */
                   1'h1:
                       (* full_case = 32'd1 *)
-                      casez ({ \$74 , \$72  })
-                        /* src = "shaman/api.py:214" */
+                      casez ({ \$354 , \$352  })
+                        /* src = "shaman/api.py:217" */
                         2'b?1:
                             \busy$next  = 1'h1;
-                        /* src = "shaman/api.py:216" */
+                        /* src = "shaman/api.py:219" */
                         2'b1?:
                           begin
                             \busy$next  = 1'h0;
                             (* full_case = 32'd1 *)
-                            casez (\$76 )
-                              /* src = "shaman/api.py:106" */
+                            casez (\$356 )
+                              /* src = "shaman/api.py:107" */
                               1'h1:
                                   /* empty */;
-                              /* src = "shaman/api.py:111" */
+                              /* src = "shaman/api.py:112" */
                               default:
-                                  casez (\$78 )
-                                    /* src = "shaman/api.py:114" */
+                                  casez (\$358 )
+                                    /* src = "shaman/api.py:115" */
                                     1'h1:
-                                        casez (\$80 )
-                                          /* src = "shaman/api.py:121" */
+                                        casez (\$360 )
+                                          /* src = "shaman/api.py:122" */
                                           1'h1:
                                               \busy$next  = 1'h1;
                                         endcase
                                   endcase
                             endcase
                           end
-                        /* src = "shaman/api.py:219" */
+                        /* src = "shaman/api.py:222" */
                         default:
                             \busy$next  = 1'h1;
                       endcase
                 endcase
-            /* src = "shaman/api.py:223" */
+            /* src = "shaman/api.py:226" */
             default:
               begin
                 \busy$next  = 1'h0;
                 (* full_case = 32'd1 *)
-                casez (\$82 )
-                  /* src = "shaman/api.py:106" */
+                casez (\$362 )
+                  /* src = "shaman/api.py:107" */
                   1'h1:
                       /* empty */;
-                  /* src = "shaman/api.py:111" */
+                  /* src = "shaman/api.py:112" */
                   default:
-                      casez (\$84 )
-                        /* src = "shaman/api.py:114" */
+                      casez (\$364 )
+                        /* src = "shaman/api.py:115" */
                         1'h1:
-                            casez (\$86 )
-                              /* src = "shaman/api.py:121" */
+                            casez (\$366 )
+                              /* src = "shaman/api.py:122" */
                               1'h1:
                                   \busy$next  = 1'h1;
                             endcase
@@ -3147,6 +1955,1129 @@ module shapi(rst, databyteIn, resultbyteOut, resultReady, beginProcessingDataBlo
           \busy$next  = 1'h0;
     endcase
   end
+  always @* begin
+    if (\$auto$verilog_backend.cc:2083:dump_module$63 ) begin end
+    \blockproc_bp_initdat$next  = blockproc_bp_initdat;
+    (* full_case = 32'd1 *)
+    casez (start)
+      /* src = "shaman/api.py:198" */
+      1'h1:
+          /* empty */;
+      /* src = "shaman/api.py:209" */
+      default:
+          casez (\$368 )
+            /* src = "shaman/api.py:213" */
+            1'h1:
+                casez (beginProcessingDataBlock)
+                  /* src = "shaman/api.py:81" */
+                  1'h1:
+                      \blockproc_bp_initdat$next  = apibuf;
+                endcase
+          endcase
+    endcase
+    casez (rst)
+      1'h1:
+          \blockproc_bp_initdat$next  = 512'h00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
+    endcase
+  end
+  always @* begin
+    if (\$auto$verilog_backend.cc:2083:dump_module$63 ) begin end
+    \dataInSeen$next  = dataInSeen;
+    (* full_case = 32'd1 *)
+    casez (start)
+      /* src = "shaman/api.py:198" */
+      1'h1:
+          /* empty */;
+      /* src = "shaman/api.py:209" */
+      default:
+          (* full_case = 32'd1 *)
+          casez (\$370 )
+            /* src = "shaman/api.py:213" */
+            1'h1:
+                casez (parallelLoading)
+                  /* src = "shaman/api.py:216" */
+                  1'h1:
+                      casez ({ \$378 , \$376  })
+                        /* src = "shaman/api.py:217" */
+                        2'b?1:
+                            /* empty */;
+                        /* src = "shaman/api.py:219" */
+                        2'b1?:
+                            (* full_case = 32'd1 *)
+                            casez (\$380 )
+                              /* src = "shaman/api.py:107" */
+                              1'h1:
+                                  \dataInSeen$next  = 1'h0;
+                              /* src = "shaman/api.py:112" */
+                              default:
+                                  casez (\$382 )
+                                    /* src = "shaman/api.py:115" */
+                                    1'h1:
+                                        \dataInSeen$next  = 1'h1;
+                                  endcase
+                            endcase
+                      endcase
+                endcase
+            /* src = "shaman/api.py:226" */
+            default:
+                (* full_case = 32'd1 *)
+                casez (\$384 )
+                  /* src = "shaman/api.py:107" */
+                  1'h1:
+                      \dataInSeen$next  = 1'h0;
+                  /* src = "shaman/api.py:112" */
+                  default:
+                      casez (\$386 )
+                        /* src = "shaman/api.py:115" */
+                        1'h1:
+                            \dataInSeen$next  = 1'h1;
+                      endcase
+                endcase
+          endcase
+    endcase
+    casez (rst)
+      1'h1:
+          \dataInSeen$next  = 1'h0;
+    endcase
+  end
+  always @* begin
+    if (\$auto$verilog_backend.cc:2083:dump_module$63 ) begin end
+    \resultIncrementSeen$next  = resultIncrementSeen;
+    (* full_case = 32'd1 *)
+    casez (resultNext)
+      /* src = "shaman/api.py:165" */
+      1'h1:
+          casez (\$5 )
+            /* src = "shaman/api.py:166" */
+            1'h1:
+                \resultIncrementSeen$next  = 1'h1;
+          endcase
+      /* src = "shaman/api.py:172" */
+      default:
+          \resultIncrementSeen$next  = 1'h0;
+    endcase
+    casez (rst)
+      1'h1:
+          \resultIncrementSeen$next  = 1'h0;
+    endcase
+  end
+  always @* begin
+    if (\$auto$verilog_backend.cc:2083:dump_module$63 ) begin end
+    \resultIndex$next  = resultIndex;
+    casez (resultNext)
+      /* src = "shaman/api.py:165" */
+      1'h1:
+          casez (\$7 )
+            /* src = "shaman/api.py:166" */
+            1'h1:
+                \resultIndex$next  = \$10 [4:0];
+          endcase
+    endcase
+    casez (start)
+      /* src = "shaman/api.py:198" */
+      1'h1:
+          \resultIndex$next  = 5'h00;
+    endcase
+    casez (rst)
+      1'h1:
+          \resultIndex$next  = 5'h00;
+    endcase
+  end
+  always @* begin
+    if (\$auto$verilog_backend.cc:2083:dump_module$63 ) begin end
+    (* full_case = 32'd1 *)
+    casez (resultIndex)
+      /* src = "shaman/api.py:149" */
+      5'h00:
+          \resultbyteOut$next  = blockproc_hbuf0[31:24];
+      /* src = "shaman/api.py:149" */
+      5'h01:
+          \resultbyteOut$next  = blockproc_hbuf0[23:16];
+      /* src = "shaman/api.py:149" */
+      5'h02:
+          \resultbyteOut$next  = blockproc_hbuf0[15:8];
+      /* src = "shaman/api.py:149" */
+      5'h03:
+          \resultbyteOut$next  = blockproc_hbuf0[7:0];
+      /* src = "shaman/api.py:149" */
+      5'h04:
+          \resultbyteOut$next  = blockproc_hbuf1[31:24];
+      /* src = "shaman/api.py:149" */
+      5'h05:
+          \resultbyteOut$next  = blockproc_hbuf1[23:16];
+      /* src = "shaman/api.py:149" */
+      5'h06:
+          \resultbyteOut$next  = blockproc_hbuf1[15:8];
+      /* src = "shaman/api.py:149" */
+      5'h07:
+          \resultbyteOut$next  = blockproc_hbuf1[7:0];
+      /* src = "shaman/api.py:149" */
+      5'h08:
+          \resultbyteOut$next  = blockproc_hbuf2[31:24];
+      /* src = "shaman/api.py:149" */
+      5'h09:
+          \resultbyteOut$next  = blockproc_hbuf2[23:16];
+      /* src = "shaman/api.py:149" */
+      5'h0a:
+          \resultbyteOut$next  = blockproc_hbuf2[15:8];
+      /* src = "shaman/api.py:149" */
+      5'h0b:
+          \resultbyteOut$next  = blockproc_hbuf2[7:0];
+      /* src = "shaman/api.py:149" */
+      5'h0c:
+          \resultbyteOut$next  = blockproc_hbuf3[31:24];
+      /* src = "shaman/api.py:149" */
+      5'h0d:
+          \resultbyteOut$next  = blockproc_hbuf3[23:16];
+      /* src = "shaman/api.py:149" */
+      5'h0e:
+          \resultbyteOut$next  = blockproc_hbuf3[15:8];
+      /* src = "shaman/api.py:149" */
+      5'h0f:
+          \resultbyteOut$next  = blockproc_hbuf3[7:0];
+      /* src = "shaman/api.py:149" */
+      5'h10:
+          \resultbyteOut$next  = blockproc_hbuf4[31:24];
+      /* src = "shaman/api.py:149" */
+      5'h11:
+          \resultbyteOut$next  = blockproc_hbuf4[23:16];
+      /* src = "shaman/api.py:149" */
+      5'h12:
+          \resultbyteOut$next  = blockproc_hbuf4[15:8];
+      /* src = "shaman/api.py:149" */
+      5'h13:
+          \resultbyteOut$next  = blockproc_hbuf4[7:0];
+      /* src = "shaman/api.py:149" */
+      5'h14:
+          \resultbyteOut$next  = blockproc_hbuf5[31:24];
+      /* src = "shaman/api.py:149" */
+      5'h15:
+          \resultbyteOut$next  = blockproc_hbuf5[23:16];
+      /* src = "shaman/api.py:149" */
+      5'h16:
+          \resultbyteOut$next  = blockproc_hbuf5[15:8];
+      /* src = "shaman/api.py:149" */
+      5'h17:
+          \resultbyteOut$next  = blockproc_hbuf5[7:0];
+      /* src = "shaman/api.py:149" */
+      5'h18:
+          \resultbyteOut$next  = blockproc_hbuf6[31:24];
+      /* src = "shaman/api.py:149" */
+      5'h19:
+          \resultbyteOut$next  = blockproc_hbuf6[23:16];
+      /* src = "shaman/api.py:149" */
+      5'h1a:
+          \resultbyteOut$next  = blockproc_hbuf6[15:8];
+      /* src = "shaman/api.py:149" */
+      5'h1b:
+          \resultbyteOut$next  = blockproc_hbuf6[7:0];
+      /* src = "shaman/api.py:149" */
+      5'h1c:
+          \resultbyteOut$next  = blockproc_hbuf7[31:24];
+      /* src = "shaman/api.py:149" */
+      5'h1d:
+          \resultbyteOut$next  = blockproc_hbuf7[23:16];
+      /* src = "shaman/api.py:149" */
+      5'h1e:
+          \resultbyteOut$next  = blockproc_hbuf7[15:8];
+      /* src = "shaman/api.py:149" */
+      5'h1f:
+          \resultbyteOut$next  = blockproc_hbuf7[7:0];
+    endcase
+    casez (rst)
+      1'h1:
+          \resultbyteOut$next  = 8'h00;
+    endcase
+  end
+  always @* begin
+    if (\$auto$verilog_backend.cc:2083:dump_module$63 ) begin end
+    \slotsByteIndex$next  = slotsByteIndex;
+    (* full_case = 32'd1 *)
+    casez (start)
+      /* src = "shaman/api.py:198" */
+      1'h1:
+          \slotsByteIndex$next  = 7'h00;
+      /* src = "shaman/api.py:209" */
+      default:
+          (* full_case = 32'd1 *)
+          casez (\$12 )
+            /* src = "shaman/api.py:213" */
+            1'h1:
+                casez (parallelLoading)
+                  /* src = "shaman/api.py:216" */
+                  1'h1:
+                      casez ({ \$20 , \$18  })
+                        /* src = "shaman/api.py:217" */
+                        2'b?1:
+                            /* empty */;
+                        /* src = "shaman/api.py:219" */
+                        2'b1?:
+                            (* full_case = 32'd1 *)
+                            casez (\$22 )
+                              /* src = "shaman/api.py:107" */
+                              1'h1:
+                                  /* empty */;
+                              /* src = "shaman/api.py:112" */
+                              default:
+                                  casez (\$24 )
+                                    /* src = "shaman/api.py:115" */
+                                    1'h1:
+                                        (* full_case = 32'd1 *)
+                                        casez (\$26 )
+                                          /* src = "shaman/api.py:122" */
+                                          1'h1:
+                                              \slotsByteIndex$next  = 7'h00;
+                                          /* src = "shaman/api.py:131" */
+                                          default:
+                                              \slotsByteIndex$next  = \$29 [6:0];
+                                        endcase
+                                  endcase
+                            endcase
+                      endcase
+                endcase
+            /* src = "shaman/api.py:226" */
+            default:
+                (* full_case = 32'd1 *)
+                casez (\$31 )
+                  /* src = "shaman/api.py:107" */
+                  1'h1:
+                      /* empty */;
+                  /* src = "shaman/api.py:112" */
+                  default:
+                      casez (\$33 )
+                        /* src = "shaman/api.py:115" */
+                        1'h1:
+                            (* full_case = 32'd1 *)
+                            casez (\$35 )
+                              /* src = "shaman/api.py:122" */
+                              1'h1:
+                                  \slotsByteIndex$next  = 7'h00;
+                              /* src = "shaman/api.py:131" */
+                              default:
+                                  \slotsByteIndex$next  = \$38 [6:0];
+                            endcase
+                      endcase
+                endcase
+          endcase
+    endcase
+    casez (rst)
+      1'h1:
+          \slotsByteIndex$next  = 7'h00;
+    endcase
+  end
+  always @* begin
+    if (\$auto$verilog_backend.cc:2083:dump_module$63 ) begin end
+    \apibuf$next  = apibuf;
+    (* full_case = 32'd1 *)
+    casez (start)
+      /* src = "shaman/api.py:198" */
+      1'h1:
+          \apibuf$next  = 512'h00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
+      /* src = "shaman/api.py:209" */
+      default:
+          (* full_case = 32'd1 *)
+          casez (\$40 )
+            /* src = "shaman/api.py:213" */
+            1'h1:
+                casez (parallelLoading)
+                  /* src = "shaman/api.py:216" */
+                  1'h1:
+                      casez ({ \$48 , \$46  })
+                        /* src = "shaman/api.py:217" */
+                        2'b?1:
+                            /* empty */;
+                        /* src = "shaman/api.py:219" */
+                        2'b1?:
+                            (* full_case = 32'd1 *)
+                            casez (\$50 )
+                              /* src = "shaman/api.py:107" */
+                              1'h1:
+                                  /* empty */;
+                              /* src = "shaman/api.py:112" */
+                              default:
+                                  casez (\$52 )
+                                    /* src = "shaman/api.py:115" */
+                                    1'h1:
+                                        (* full_case = 32'd1 *)
+                                        casez (\$54 )
+                                          /* src = "shaman/api.py:122" */
+                                          1'h1:
+                                              \apibuf$next [7:0] = databyteIn;
+                                          /* src = "shaman/api.py:131" */
+                                          default:
+                                            begin
+                                              casez (\$56 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [511:504] = databyteIn;
+                                              endcase
+                                              casez (\$58 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [503:496] = databyteIn;
+                                              endcase
+                                              casez (\$60 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [495:488] = databyteIn;
+                                              endcase
+                                              casez (\$62 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [487:480] = databyteIn;
+                                              endcase
+                                              casez (\$64 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [479:472] = databyteIn;
+                                              endcase
+                                              casez (\$66 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [471:464] = databyteIn;
+                                              endcase
+                                              casez (\$68 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [463:456] = databyteIn;
+                                              endcase
+                                              casez (\$70 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [455:448] = databyteIn;
+                                              endcase
+                                              casez (\$72 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [447:440] = databyteIn;
+                                              endcase
+                                              casez (\$74 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [439:432] = databyteIn;
+                                              endcase
+                                              casez (\$76 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [431:424] = databyteIn;
+                                              endcase
+                                              casez (\$78 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [423:416] = databyteIn;
+                                              endcase
+                                              casez (\$80 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [415:408] = databyteIn;
+                                              endcase
+                                              casez (\$82 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [407:400] = databyteIn;
+                                              endcase
+                                              casez (\$84 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [399:392] = databyteIn;
+                                              endcase
+                                              casez (\$86 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [391:384] = databyteIn;
+                                              endcase
+                                              casez (\$88 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [383:376] = databyteIn;
+                                              endcase
+                                              casez (\$90 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [375:368] = databyteIn;
+                                              endcase
+                                              casez (\$92 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [367:360] = databyteIn;
+                                              endcase
+                                              casez (\$94 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [359:352] = databyteIn;
+                                              endcase
+                                              casez (\$96 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [351:344] = databyteIn;
+                                              endcase
+                                              casez (\$98 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [343:336] = databyteIn;
+                                              endcase
+                                              casez (\$100 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [335:328] = databyteIn;
+                                              endcase
+                                              casez (\$102 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [327:320] = databyteIn;
+                                              endcase
+                                              casez (\$104 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [319:312] = databyteIn;
+                                              endcase
+                                              casez (\$106 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [311:304] = databyteIn;
+                                              endcase
+                                              casez (\$108 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [303:296] = databyteIn;
+                                              endcase
+                                              casez (\$110 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [295:288] = databyteIn;
+                                              endcase
+                                              casez (\$112 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [287:280] = databyteIn;
+                                              endcase
+                                              casez (\$114 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [279:272] = databyteIn;
+                                              endcase
+                                              casez (\$116 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [271:264] = databyteIn;
+                                              endcase
+                                              casez (\$118 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [263:256] = databyteIn;
+                                              endcase
+                                              casez (\$120 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [255:248] = databyteIn;
+                                              endcase
+                                              casez (\$122 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [247:240] = databyteIn;
+                                              endcase
+                                              casez (\$124 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [239:232] = databyteIn;
+                                              endcase
+                                              casez (\$126 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [231:224] = databyteIn;
+                                              endcase
+                                              casez (\$128 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [223:216] = databyteIn;
+                                              endcase
+                                              casez (\$130 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [215:208] = databyteIn;
+                                              endcase
+                                              casez (\$132 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [207:200] = databyteIn;
+                                              endcase
+                                              casez (\$134 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [199:192] = databyteIn;
+                                              endcase
+                                              casez (\$136 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [191:184] = databyteIn;
+                                              endcase
+                                              casez (\$138 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [183:176] = databyteIn;
+                                              endcase
+                                              casez (\$140 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [175:168] = databyteIn;
+                                              endcase
+                                              casez (\$142 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [167:160] = databyteIn;
+                                              endcase
+                                              casez (\$144 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [159:152] = databyteIn;
+                                              endcase
+                                              casez (\$146 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [151:144] = databyteIn;
+                                              endcase
+                                              casez (\$148 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [143:136] = databyteIn;
+                                              endcase
+                                              casez (\$150 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [135:128] = databyteIn;
+                                              endcase
+                                              casez (\$152 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [127:120] = databyteIn;
+                                              endcase
+                                              casez (\$154 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [119:112] = databyteIn;
+                                              endcase
+                                              casez (\$156 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [111:104] = databyteIn;
+                                              endcase
+                                              casez (\$158 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [103:96] = databyteIn;
+                                              endcase
+                                              casez (\$160 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [95:88] = databyteIn;
+                                              endcase
+                                              casez (\$162 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [87:80] = databyteIn;
+                                              endcase
+                                              casez (\$164 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [79:72] = databyteIn;
+                                              endcase
+                                              casez (\$166 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [71:64] = databyteIn;
+                                              endcase
+                                              casez (\$168 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [63:56] = databyteIn;
+                                              endcase
+                                              casez (\$170 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [55:48] = databyteIn;
+                                              endcase
+                                              casez (\$172 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [47:40] = databyteIn;
+                                              endcase
+                                              casez (\$174 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [39:32] = databyteIn;
+                                              endcase
+                                              casez (\$176 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [31:24] = databyteIn;
+                                              endcase
+                                              casez (\$178 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [23:16] = databyteIn;
+                                              endcase
+                                              casez (\$180 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [15:8] = databyteIn;
+                                              endcase
+                                              casez (\$182 )
+                                                /* src = "shaman/api.py:134" */
+                                                1'h1:
+                                                    \apibuf$next [7:0] = databyteIn;
+                                              endcase
+                                            end
+                                        endcase
+                                  endcase
+                            endcase
+                      endcase
+                endcase
+            /* src = "shaman/api.py:226" */
+            default:
+                (* full_case = 32'd1 *)
+                casez (\$184 )
+                  /* src = "shaman/api.py:107" */
+                  1'h1:
+                      /* empty */;
+                  /* src = "shaman/api.py:112" */
+                  default:
+                      casez (\$186 )
+                        /* src = "shaman/api.py:115" */
+                        1'h1:
+                            (* full_case = 32'd1 *)
+                            casez (\$188 )
+                              /* src = "shaman/api.py:122" */
+                              1'h1:
+                                  \apibuf$next [7:0] = databyteIn;
+                              /* src = "shaman/api.py:131" */
+                              default:
+                                begin
+                                  casez (\$190 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [511:504] = databyteIn;
+                                  endcase
+                                  casez (\$192 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [503:496] = databyteIn;
+                                  endcase
+                                  casez (\$194 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [495:488] = databyteIn;
+                                  endcase
+                                  casez (\$196 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [487:480] = databyteIn;
+                                  endcase
+                                  casez (\$198 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [479:472] = databyteIn;
+                                  endcase
+                                  casez (\$200 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [471:464] = databyteIn;
+                                  endcase
+                                  casez (\$202 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [463:456] = databyteIn;
+                                  endcase
+                                  casez (\$204 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [455:448] = databyteIn;
+                                  endcase
+                                  casez (\$206 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [447:440] = databyteIn;
+                                  endcase
+                                  casez (\$208 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [439:432] = databyteIn;
+                                  endcase
+                                  casez (\$210 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [431:424] = databyteIn;
+                                  endcase
+                                  casez (\$212 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [423:416] = databyteIn;
+                                  endcase
+                                  casez (\$214 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [415:408] = databyteIn;
+                                  endcase
+                                  casez (\$216 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [407:400] = databyteIn;
+                                  endcase
+                                  casez (\$218 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [399:392] = databyteIn;
+                                  endcase
+                                  casez (\$220 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [391:384] = databyteIn;
+                                  endcase
+                                  casez (\$222 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [383:376] = databyteIn;
+                                  endcase
+                                  casez (\$224 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [375:368] = databyteIn;
+                                  endcase
+                                  casez (\$226 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [367:360] = databyteIn;
+                                  endcase
+                                  casez (\$228 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [359:352] = databyteIn;
+                                  endcase
+                                  casez (\$230 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [351:344] = databyteIn;
+                                  endcase
+                                  casez (\$232 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [343:336] = databyteIn;
+                                  endcase
+                                  casez (\$234 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [335:328] = databyteIn;
+                                  endcase
+                                  casez (\$236 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [327:320] = databyteIn;
+                                  endcase
+                                  casez (\$238 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [319:312] = databyteIn;
+                                  endcase
+                                  casez (\$240 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [311:304] = databyteIn;
+                                  endcase
+                                  casez (\$242 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [303:296] = databyteIn;
+                                  endcase
+                                  casez (\$244 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [295:288] = databyteIn;
+                                  endcase
+                                  casez (\$246 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [287:280] = databyteIn;
+                                  endcase
+                                  casez (\$248 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [279:272] = databyteIn;
+                                  endcase
+                                  casez (\$250 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [271:264] = databyteIn;
+                                  endcase
+                                  casez (\$252 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [263:256] = databyteIn;
+                                  endcase
+                                  casez (\$254 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [255:248] = databyteIn;
+                                  endcase
+                                  casez (\$256 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [247:240] = databyteIn;
+                                  endcase
+                                  casez (\$258 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [239:232] = databyteIn;
+                                  endcase
+                                  casez (\$260 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [231:224] = databyteIn;
+                                  endcase
+                                  casez (\$262 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [223:216] = databyteIn;
+                                  endcase
+                                  casez (\$264 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [215:208] = databyteIn;
+                                  endcase
+                                  casez (\$266 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [207:200] = databyteIn;
+                                  endcase
+                                  casez (\$268 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [199:192] = databyteIn;
+                                  endcase
+                                  casez (\$270 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [191:184] = databyteIn;
+                                  endcase
+                                  casez (\$272 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [183:176] = databyteIn;
+                                  endcase
+                                  casez (\$274 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [175:168] = databyteIn;
+                                  endcase
+                                  casez (\$276 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [167:160] = databyteIn;
+                                  endcase
+                                  casez (\$278 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [159:152] = databyteIn;
+                                  endcase
+                                  casez (\$280 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [151:144] = databyteIn;
+                                  endcase
+                                  casez (\$282 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [143:136] = databyteIn;
+                                  endcase
+                                  casez (\$284 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [135:128] = databyteIn;
+                                  endcase
+                                  casez (\$286 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [127:120] = databyteIn;
+                                  endcase
+                                  casez (\$288 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [119:112] = databyteIn;
+                                  endcase
+                                  casez (\$290 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [111:104] = databyteIn;
+                                  endcase
+                                  casez (\$292 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [103:96] = databyteIn;
+                                  endcase
+                                  casez (\$294 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [95:88] = databyteIn;
+                                  endcase
+                                  casez (\$296 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [87:80] = databyteIn;
+                                  endcase
+                                  casez (\$298 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [79:72] = databyteIn;
+                                  endcase
+                                  casez (\$300 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [71:64] = databyteIn;
+                                  endcase
+                                  casez (\$302 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [63:56] = databyteIn;
+                                  endcase
+                                  casez (\$304 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [55:48] = databyteIn;
+                                  endcase
+                                  casez (\$306 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [47:40] = databyteIn;
+                                  endcase
+                                  casez (\$308 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [39:32] = databyteIn;
+                                  endcase
+                                  casez (\$310 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [31:24] = databyteIn;
+                                  endcase
+                                  casez (\$312 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [23:16] = databyteIn;
+                                  endcase
+                                  casez (\$314 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [15:8] = databyteIn;
+                                  endcase
+                                  casez (\$316 )
+                                    /* src = "shaman/api.py:134" */
+                                    1'h1:
+                                        \apibuf$next [7:0] = databyteIn;
+                                  endcase
+                                end
+                            endcase
+                      endcase
+                endcase
+          endcase
+    endcase
+    casez (rst)
+      1'h1:
+          \apibuf$next  = 512'h00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
+    endcase
+  end
+  always @* begin
+    if (\$auto$verilog_backend.cc:2083:dump_module$63 ) begin end
+    \blockproc_initBufferReady$next  = blockproc_initBufferReady;
+    (* full_case = 32'd1 *)
+    casez (start)
+      /* src = "shaman/api.py:198" */
+      1'h1:
+          \blockproc_initBufferReady$next  = 1'h0;
+      /* src = "shaman/api.py:209" */
+      default:
+          casez (\$318 )
+            /* src = "shaman/api.py:213" */
+            1'h1:
+                (* full_case = 32'd1 *)
+                casez (beginProcessingDataBlock)
+                  /* src = "shaman/api.py:81" */
+                  1'h1:
+                      \blockproc_initBufferReady$next  = 1'h1;
+                  /* src = "shaman/api.py:91" */
+                  default:
+                      \blockproc_initBufferReady$next  = 1'h0;
+                endcase
+          endcase
+    endcase
+    casez (rst)
+      1'h1:
+          \blockproc_initBufferReady$next  = 1'h0;
+    endcase
+  end
+  always @* begin
+    if (\$auto$verilog_backend.cc:2083:dump_module$63 ) begin end
+    \blockproc_doProcessBlock$next  = blockproc_doProcessBlock;
+    (* full_case = 32'd1 *)
+    casez (start)
+      /* src = "shaman/api.py:198" */
+      1'h1:
+          \blockproc_doProcessBlock$next  = 1'h0;
+      /* src = "shaman/api.py:209" */
+      default:
+          casez (\$320 )
+            /* src = "shaman/api.py:213" */
+            1'h1:
+                (* full_case = 32'd1 *)
+                casez (beginProcessingDataBlock)
+                  /* src = "shaman/api.py:81" */
+                  1'h1:
+                      \blockproc_doProcessBlock$next  = 1'h1;
+                  /* src = "shaman/api.py:91" */
+                  default:
+                      casez (blockproc_bp_outrdy)
+                        /* src = "shaman/api.py:95" */
+                        1'h1:
+                            \blockproc_doProcessBlock$next  = 1'h0;
+                      endcase
+                endcase
+          endcase
+    endcase
+    casez (rst)
+      1'h1:
+          \blockproc_doProcessBlock$next  = 1'h0;
+    endcase
+  end
+  always @* begin
+    if (\$auto$verilog_backend.cc:2083:dump_module$63 ) begin end
+    \processingReceivedDataBlock$next  = processingReceivedDataBlock;
+    (* full_case = 32'd1 *)
+    casez (start)
+      /* src = "shaman/api.py:198" */
+      1'h1:
+          \processingReceivedDataBlock$next  = 1'h0;
+      /* src = "shaman/api.py:209" */
+      default:
+          casez (\$322 )
+            /* src = "shaman/api.py:213" */
+            1'h1:
+                (* full_case = 32'd1 *)
+                casez (beginProcessingDataBlock)
+                  /* src = "shaman/api.py:81" */
+                  1'h1:
+                      \processingReceivedDataBlock$next  = 1'h1;
+                  /* src = "shaman/api.py:91" */
+                  default:
+                      casez (blockproc_bp_outrdy)
+                        /* src = "shaman/api.py:95" */
+                        1'h1:
+                            \processingReceivedDataBlock$next  = 1'h0;
+                      endcase
+                endcase
+          endcase
+    endcase
+    casez (rst)
+      1'h1:
+          \processingReceivedDataBlock$next  = 1'h0;
+    endcase
+  end
   assign \$9  = \$10 ;
   assign \$28  = \$29 ;
   assign \$37  = \$38 ;
@@ -3154,7 +3085,7 @@ module shapi(rst, databyteIn, resultbyteOut, resultReady, beginProcessingDataBlo
   assign blockproc_newMessage = start;
 endmodule
 
-(* \amaranth.hierarchy  = "psychogenic_shaman.shapi.blockproc.t1" *)
+(* \amaranth.hierarchy  = "tt_um_psychogenic_shaman.shapi.blockproc.t1" *)
 (* generator = "Amaranth" *)
 module t1(rst, initBufferReady, t1_initdat, t1_e, t1_f, t1_g, t1_h, t1_count, t1_outrdy, t1_out, clk);
   reg \$auto$verilog_backend.cc:2083:dump_module$64  = 0;
@@ -3748,7 +3679,7 @@ module t1(rst, initBufferReady, t1_initdat, t1_e, t1_f, t1_g, t1_h, t1_count, t1
   assign wt_initBufferReady = initBufferReady;
 endmodule
 
-(* \amaranth.hierarchy  = "psychogenic_shaman.shapi.blockproc.t2" *)
+(* \amaranth.hierarchy  = "tt_um_psychogenic_shaman.shapi.blockproc.t2" *)
 (* generator = "Amaranth" *)
 module t2(t2_b, t2_c, t2_out, t2_a);
   wire [32:0] \$1 ;
@@ -3786,7 +3717,71 @@ module t2(t2_b, t2_c, t2_out, t2_a);
   assign rot0_rot0_x = t2_a;
 endmodule
 
-(* \amaranth.hierarchy  = "psychogenic_shaman.shapi.blockproc.t1.wt" *)
+(* \amaranth.hierarchy  = "tt_um_psychogenic_shaman" *)
+(* top =  1  *)
+(* generator = "Amaranth" *)
+module tt_um_psychogenic_shaman(uo_out, uio_in, uio_out, uio_oe, ena, clk, rst_n, ui_in);
+  wire \$1 ;
+  input clk;
+  wire clk;
+  input ena;
+  wire ena;
+  input rst_n;
+  wire rst_n;
+  wire shapi_beginProcessingDataBlock;
+  wire shapi_busy;
+  wire shapi_clk;
+  wire shapi_clockinData;
+  wire [7:0] shapi_databyteIn;
+  wire shapi_parallelLoading;
+  wire shapi_processingReceivedDataBlock;
+  wire shapi_resultNext;
+  wire shapi_resultReady;
+  wire [7:0] shapi_resultbyteOut;
+  wire shapi_rst;
+  wire shapi_start;
+  input [7:0] ui_in;
+  wire [7:0] ui_in;
+  input [7:0] uio_in;
+  wire [7:0] uio_in;
+  output [7:0] uio_oe;
+  wire [7:0] uio_oe;
+  output [7:0] uio_out;
+  wire [7:0] uio_out;
+  output [7:0] uo_out;
+  wire [7:0] uo_out;
+  assign \$1  = ~ rst_n;
+  shapi shapi (
+    .beginProcessingDataBlock(shapi_beginProcessingDataBlock),
+    .busy(shapi_busy),
+    .clk(shapi_clk),
+    .clockinData(shapi_clockinData),
+    .databyteIn(shapi_databyteIn),
+    .parallelLoading(shapi_parallelLoading),
+    .processingReceivedDataBlock(shapi_processingReceivedDataBlock),
+    .resultNext(shapi_resultNext),
+    .resultReady(shapi_resultReady),
+    .resultbyteOut(shapi_resultbyteOut),
+    .rst(shapi_rst),
+    .start(shapi_start)
+  );
+  assign shapi_clockinData = uio_in[7];
+  assign shapi_start = uio_in[6];
+  assign shapi_resultNext = uio_in[3];
+  assign shapi_parallelLoading = uio_in[2];
+  assign uio_out[5] = shapi_processingReceivedDataBlock;
+  assign uio_out[4] = shapi_busy;
+  assign uio_out[1] = shapi_beginProcessingDataBlock;
+  assign uio_out[0] = shapi_resultReady;
+  assign { uio_out[7:6], uio_out[3:2] } = 4'h0;
+  assign uio_oe = 8'h33;
+  assign uo_out = shapi_resultbyteOut;
+  assign shapi_databyteIn = ui_in;
+  assign shapi_rst = \$1 ;
+  assign shapi_clk = clk;
+endmodule
+
+(* \amaranth.hierarchy  = "tt_um_psychogenic_shaman.shapi.blockproc.t1.wt" *)
 (* generator = "Amaranth" *)
 module wt(rst, initBufferReady, wt_initdat, wt_outrdy, wt_count, wt_out, clk);
   reg \$auto$verilog_backend.cc:2083:dump_module$65  = 0;
@@ -5201,5 +5196,4 @@ module wt(rst, initBufferReady, wt_initdat, wt_outrdy, wt_count, wt_out, clk);
   assign \$229  = \$230 ;
   assign \$10  = { 31'h00000000, wt_buf, 32'h00000000 };
 endmodule
-
 
